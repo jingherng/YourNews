@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SearchView
+        android:paddingTop="8dp"
+        android:id="@+id/Search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Enter keywords or tags"
+        android:onClick="search"/>
+
+    <TextView
+        android:paddingTop="8dp"
+        android:id="@+id/Weather"
+        android:text="@string/weather"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"/>
+
+    <FrameLayout
+        android:id="@+id/weather_Box"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+
+    <TextView
+        android:id="@+id/LatestHeadlines"
+        android:text="@string/LatestHeadlines"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:paddingTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/LatestHeadlines_box"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

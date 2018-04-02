@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">YourNews</string>
+    <string name="Login">Login</string>
+    <string name="SignUp">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="username">Username/Email</string>
+    <string name="captions">Curated just for you</string>
+    <string name="tapAnywhere">Tap anywhere to continue</string>
+    <string name="News">News</string>
+    <string name="BBC">BBC</string>
+    <string name="CNN">CNN</string>
+    <string name="WSJ">WSJ</string>
+    <string name="RT">RT</string>
+    <string name="NYT">NYT</string>
+    <string name="Sports">Sports</string>
+    <string name="Sky">Sky</string>
+    <string name="CBS">CBS</string>
+    <string name="BR">BR</string>
+    <string name="ESPN">ESPN</string>
+    <string name="NBC">NBC</string>
+    <string name="Confirm">Confirm</string>
+    <string name="topMenu">Menu</string>
+    <string-array name="menu">
+        <item>Account Settings</item>
+        <item>Latest News</item>
+        <item>Recommendations</item>
+        <item>Bookmarks</item>
+    </string-array>
+    <string name="weather">Weather Today</string>
+    <string name="LatestHeadlines">Latest Headlines</string>
+    <string name="today">Today</string>
+    <string name="Account">Account</string>
+    <string name="userInfo">Username :  </string>
+    <string name="YourSources">Your News Sources</string>
+    <string name="SearchResults">Your Search Results</string>
+    <string name="bookmarks">Your Bookmarks</string>
+
+    <string name="title_activity_main_app">MainApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

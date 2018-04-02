@@ -1,0 +1,126 @@
+package com.example.powjh.yournews;
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+import android.app.Activity;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
+
+public class MainApp extends Activity {
+    // Menu variables
+    private String[] menu;
+    private ListView menuList;
+    private DrawerLayout drawerLayout;
+    public static headlinesAPI headlines;
+    private KeywordsDB keywordsDB = new KeywordsDB(this);
+    private UserInfoDB userDB = new UserInfoDB(this);
+    private BookmarksDB bmDB = new BookmarksDB(this);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_app);
+
+        // Sets Menu
+        menu = getResources().getStringArray(R.array.menu);
+        menuList = findViewById(R.id.drawer);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        menuList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu));
+        menuList.setOnItemClickListener(new DrawerItemClickListener());
+
+        // Sets Weather Box
+        setWeather();
+
+        // Set headlines
+        setHeadlines();
+
+        // Sets DB
+        SQLiteOpenHelper dbHelper = userDB;
+        LinearLayout searchResults = findViewById(R.id.SearchResults);
+        searchResults.setVisibility(View.GONE);
+
+        // Sets Search view
+        final SearchView search = findViewById(R.id.Search);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchAPI searchAPI = new searchAPI(MainApp.this);
+                searchAPI.setQuery(s);
+                searchAPI.execute();
+                LinearLayout searchResults = findViewById(R.id.SearchResults);
+                searchResults.setVisibility(View.VISIBLE);
+                LinearLayout rest = findViewById(R.id.rest);
+                rest.setVisibility(View.INVISIBLE);
+                // Adds keywords of searches to database
+                ContentValues keywords = new ContentValues();
+                keywords.put("KEYWORDS" , search.getQuery().toString());
+                SQLiteOpenHelper dbHelper = keywordsDB;
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.update("USER_KEYS", keywords, "_id= ?",new String[]{Integer.toString(1)});
+                db.close();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return true;
+            }
+        });
+    }
+
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            selectItem(position);
+        }
+
+        private void selectItem(int position){
+            switch(position){
+                case 0:
+                    // Account Settings
+                    Intent recommendIntent = new Intent(MainApp.this, AccountRec.class);
+                    startActivity(recommendIntent);
+                    break;
+                case 1:
+                    // Latest news
+                    break;
+                case 2:
+                    // Recommendations
+                    break;
+                case 3:
+                    // Bookmarks
+                    Intent bmIntent = new Intent(MainApp.this, Bookmarks.class);
+                    startActivity(bmIntent);
+                    break;
+            }
+        }
+    }
+
+    private void setWeather(){
+        new weatherAPI(this).execute();
+    }
+
+    private void setHeadlines(){
+        headlines = new headlinesAPI(this);
+        headlines.execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LinearLayout searchResults = findViewById(R.id.SearchResults);
+        searchResults.setVisibility(View.GONE);
+        LinearLayout rest = findViewById(R.id.rest);
+        rest.setVisibility(View.VISIBLE);
+    }
+}

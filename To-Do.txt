@@ -1,0 +1,18 @@
+Bugs:
+1. 
+
+To-Do:
+1. Right swipe to bookmark (30%)
+	(a) Implement on right clicked
+	(b) Save article to DB
+	(c) Implement new Frag/Activity for Bookmarks
+	(d) Update MainApp for on click Bookmarks
+	(e) Go to Bookmarks and update content
+
+2. Implement Endless Scrolling
+
+3. Reading List 
+
+4. AI Recommendations
+
+5. Latest news
