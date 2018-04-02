@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.ibm.watson.developer_cloud:java-sdk:5.1.1@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ibm.watson.developer_cloud/java-sdk/5.1.1/1c6992bb8078d7bc115b7914a6c6f0f510642881/java-sdk-5.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ibm.watson.developer_cloud/java-sdk/5.1.1/e0545a683164fab24d67db312ed2bc383b8809d6/java-sdk-5.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
