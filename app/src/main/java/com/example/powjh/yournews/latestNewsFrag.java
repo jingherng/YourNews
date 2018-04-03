@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Canvas;
@@ -16,11 +15,10 @@ import android.view.*;
 import android.os.Bundle;
 import java.util.HashMap;
 
-public class bookmarkFrag extends Fragment{
+public class latestNewsFrag extends Fragment{
 
     String[] captions;
     String[] imageURL;
-    String[] url;
     private Context C;
     private static SwipeController swipeController;
 
@@ -29,26 +27,15 @@ public class bookmarkFrag extends Fragment{
 
         C = getContext();
 
-        SQLiteOpenHelper dbHelper = MainApp.bmDB;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query("USER_BOOKMARKS",new String[]{"ARTICLES", "CAPTIONS", "IMAGEURL"},
-                null,
-                null, null, null, null);
+        String[] captions = new String[latestNewsAPI.retrieveNews().size()];
+        String[] imageURL = new String[latestNewsAPI.retrieveNews().size()];
+
         int i = 0;
-        url = new String[cursor.getCount()];
-        captions = new String[cursor.getCount()];
-        imageURL = new String[cursor.getCount()];
-        Log.d("Cursor Count: ", "> " + cursor.getCount());
-        while (cursor.moveToNext()){
-            Log.d("Cursor getString(0): ", "> " + cursor.getString(cursor.getColumnIndex("ARTICLES")));
-            Log.d("Cursor getString(1): ", "> " + cursor.getString(cursor.getColumnIndex("CAPTIONS")));
-            Log.d("Cursor getString(2): ", "> " + cursor.getString(cursor.getColumnIndex("IMAGEURL")));
-            url[i] = cursor.getString(cursor.getColumnIndex("ARTICLES"));
-            captions[i] = cursor.getString(cursor.getColumnIndex("CAPTIONS"));
-            imageURL[i] = cursor.getString(cursor.getColumnIndex("IMAGEURL"));
+        for (HashMap<String, String> item: latestNewsAPI.retrieveNews()){
+            captions[i] = item.get("title");
+            imageURL[i] = item.get("imageurl");
             i++;
         }
-        cursor.close();
 
         newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -57,8 +44,8 @@ public class bookmarkFrag extends Fragment{
         newsRecycler.setAdapter(adapter);
         adapter.setListener(new newsAdapter.Listener(){
             public void onClick(int position){
-                Intent intent = new Intent(getActivity(), bmWebView.class);
-                intent.putExtra(bmWebView.TAG, position);
+                Intent intent = new Intent(getActivity(), latestNewsWebView.class);
+                intent.putExtra(latestNewsWebView.TAG, position);
                 getActivity().startActivity(intent);
             }
         });
@@ -73,7 +60,27 @@ public class bookmarkFrag extends Fragment{
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
-                // Remove bookmark from article
+                ContentValues articles = new ContentValues();
+
+                int i = 0;
+                for (HashMap<String, String> item: latestNewsAPI.retrieveNews()){
+                    if (i == position){
+                        articles.put("ARTICLES" , item.get("url"));
+                        articles.put("CAPTIONS", item.get("title"));
+                        articles.put("IMAGEURL", item.get("imageurl"));
+                    }
+                    i++;
+                }
+                Log.d("Bookmarked > ", articles.toString());
+                SQLiteOpenHelper dbHelper = MainApp.bmDB;
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                if (!MainApp.bmDB.CheckIsDataAlreadyInDBorNot("USER_BOOKMARKS","CAPTIONS",articles.getAsString("CAPTIONS"))){
+                    db.insert("USER_BOOKMARKS", null, articles);
+                    Log.d("Bookmark", ": Success");
+                } else {
+                    Log.d("Bookmark", ": Unsuccessful. Bookmark already exists");
+                }
+                db.close();
 
             }
         });

@@ -19,7 +19,6 @@ public class headlinesFrag extends Fragment{
 
     String[] captions;
     String[] imageURL;
-    private BookmarksDB bm;
     private Context C;
     private static SwipeController swipeController;
 
@@ -27,7 +26,6 @@ public class headlinesFrag extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         C = getContext();
-        bm = new BookmarksDB(C);
 
         String[] captions = new String[headlinesAPI.retrieveNews().size()];
         String[] imageURL = new String[headlinesAPI.retrieveNews().size()];
@@ -74,10 +72,15 @@ public class headlinesFrag extends Fragment{
                     i++;
                 }
                 Log.d("Bookmarked > ", articles.toString());
-                SQLiteOpenHelper dbHelper = bm;
+                SQLiteOpenHelper dbHelper = MainApp.bmDB;
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.insert("USER_BOOKMARKS", null, articles);
-                Log.d("Bookmark", ": Success");
+                if (!MainApp.bmDB.CheckIsDataAlreadyInDBorNot("USER_BOOKMARKS","CAPTIONS",articles.getAsString("CAPTIONS"))){
+                    db.insert("USER_BOOKMARKS", null, articles);
+                    Log.d("Bookmark", ": Success");
+                } else {
+                    Log.d("Bookmark", ": Unsuccessful. Bookmark already exists");
+                }
+                db.close();
 
             }
         });

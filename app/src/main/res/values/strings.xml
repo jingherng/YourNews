@@ -34,7 +34,8 @@
     <string name="YourSources">Your News Sources</string>
     <string name="SearchResults">Your Search Results</string>
     <string name="bookmarks">Your Bookmarks</string>
-
+    <string name="yourRecommends">Your Recommendations</string>
+    <string name="latestNews">Latest News</string>
     <string name="title_activity_main_app">MainApp</string>
 
     <!-- TODO: Remove or change this placeholder text -->

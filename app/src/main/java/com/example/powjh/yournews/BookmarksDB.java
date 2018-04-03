@@ -1,5 +1,6 @@
 package com.example.powjh.yournews;
 
+import android.database.Cursor;
 import android.database.sqlite.*;
 import android.content.Context;
 
@@ -24,6 +25,16 @@ class BookmarksDB extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVer, int newVer){
 
+    }
+
+    public static boolean CheckIsDataAlreadyInDBorNot(String TableName, String dbfield, String fieldValue) {
+        SQLiteDatabase sqldb = MainApp.bmDB.getReadableDatabase();
+        String Query = "Select * from " + TableName + " where " + dbfield + "='" + fieldValue+"'";
+        Cursor cursor = sqldb.rawQuery(Query, null);
+        if (cursor.getCount()>0)
+            return true;
+        else
+            return false;
     }
 
 }

@@ -7,8 +7,6 @@ import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
-
 import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,67 +18,54 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class searchAPI extends AsyncTask<Void, Void, Boolean> {
+class latestNewsAPI extends AsyncTask<Void, Integer, Boolean>{
 
-    private static ArrayList<HashMap<String, String>> searchNewsList;
+    private static ArrayList<HashMap<String, String>> newsList;
 
     Activity c;
-
-    private String userQuery;
+    public static String newsSources = "";
 
     public static ArrayList<HashMap<String,String>> retrieveNews(){
-        return searchNewsList;
+        return newsList;
     }
 
-    public searchAPI(Activity c){
+    public latestNewsAPI(Activity c){
         this.c = c;
     }
-
-    public void setQuery(String s){
-        this.userQuery = s;
-    }
-
     // Do in background
     @Override
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
         APIrequest webreq = new APIrequest();
 
-        //HttpURLCon webreq = new HttpURLCon();
-
         // Make a function that adds all news sources in the format: bloomberg|bbc
-        //String newsSources = "";
         // Insert function here
         //String newsSourceurl = newsSources.replaceAll("|","+OR+");
 
         // url for latest
-        //String url = "https://www.reddit.com/r/worldnews/search.json?q="+userQuery+"+=url%3A"+newsSourceurl+"&restrict_sr=on&sort=relevance&t=hot&limit=5";
-        String emptyurl = "https://www.reddit.com/r/worldnews/search.json?q="+userQuery+"&restrict_sr=on&sort=new&t=all";
-        //String emptyurl = "https://newsapi.org/v2/everything?q="+userQuery+"&domains=bbc.co.uk,techcrunch.com,engadget.com,cnn.com,nytimes.com"+"&language=en&sortBy=popularity"+"&apiKey=f0da13ca99f44e9b9cc4d6ff7b4d4924";
+        //String url = "https://www.reddit.com/r/worldnews/search?q=url%3A"+newsSourceurl+"&restrict_sr=on&sort=hot&t=all";
+        String emptyurl = "https://www.reddit.com/r/worldnews/new/.json";
         //String latestNewsStr = webreq.makeWebServiceCall(url, APIrequest.GETRequest);
-        //String emptyLatestNewsStr = "";
         String emptyLatestNewsStr = webreq.makeWebServiceCall(emptyurl);
-        Log.d("emptyLatestNewsStr: ", "> " + emptyLatestNewsStr);
-        /*try{
-                emptyLatestNewsStr = webreq.sendGet();
-                }
-        catch(Exception e){
-        }*/
-
 
         /*if (newsSources.equals("")) {
-            searchNewsList = ParseJSON(emptyLatestNewsStr);
+            newsList = ParseJSON(emptyLatestNewsStr);
         }else {
-            searchNewsList = ParseJSON(latestNewsStr);
-        }
-
-        Log.d("Search Results: ", "> " + newsSources);
-        Log.d("Search Results: ", "> " + latestNewsStr);*/
-        searchNewsList = ParseJSON(emptyLatestNewsStr);
-
+            newsList = ParseJSON(latestNewsStr);
+        }*/
+        newsList = ParseJSON(emptyLatestNewsStr);
         return true;
     }
 
+    @Override
+    protected void onPostExecute(Boolean values){
+        c.findViewById(R.id.LatestNewsprogress).setVisibility(View.GONE);
+        Fragment bookmarksFrag = new latestNewsFrag();
+        FragmentManager manager = c.getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.latestNewsFrag, bookmarksFrag);
+        transaction.commitAllowingStateLoss();
+    }
 
     private ArrayList<HashMap<String, String>> ParseJSON(String latestNewsStr) {
         if (latestNewsStr != null) {
@@ -139,11 +124,10 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
                     latestNewsList.add(newsdict);
 
                 }
-
-                Log.d("Search Results: ", "> " + latestNewsList);
-
-
+                Log.d("Response Code: ", "> " + latestNewsList);
+                Log.d("Response Code: ", "> " + newsSources);
                 return latestNewsList;
+
             }catch(IOException| JSONException e){
                 e.printStackTrace();
                 return null;
@@ -152,16 +136,5 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
             Log.e("ServiceHandler", "No data received from HTTP Request");
             return null;
         }
-    }
-
-    @Override
-    protected void onPostExecute(Boolean values){
-        c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
-        Fragment fragment1 = new searchFrag();
-        FragmentManager manager1 = c.getFragmentManager();
-        FragmentTransaction transaction1 = manager1.beginTransaction();
-        transaction1.replace(R.id.SearchResults, fragment1);
-        transaction1.addToBackStack(null);
-        transaction1.commitAllowingStateLoss();
     }
 }

@@ -12,29 +12,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class Bookmarks extends Activity {
+public class LatestNews extends Activity {
     // Menu variables
     private String[] menu;
     private ListView menuList;
     private DrawerLayout drawerLayout;
+    private latestNewsAPI latest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bookmarks);
+        setContentView(R.layout.activity_latest_news);
 
         // Sets Menu
         menu = getResources().getStringArray(R.array.menu);
         menuList = findViewById(R.id.drawer);
         drawerLayout = findViewById(R.id.drawer_layout);
         menuList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu));
-        menuList.setOnItemClickListener(new Bookmarks.DrawerItemClickListener());
+        menuList.setOnItemClickListener(new LatestNews.DrawerItemClickListener());
 
-        Fragment bookmarksFrag = new bookmarkFrag();
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.bookmarksFrag, bookmarksFrag);
-        transaction.commitAllowingStateLoss();
+        //
+        setNews();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
@@ -47,24 +45,29 @@ public class Bookmarks extends Activity {
             switch(position){
                 case 0:
                     // Account Settings
-                    Intent recommendIntent = new Intent(Bookmarks.this, AccountRec.class);
+                    Intent recommendIntent = new Intent(LatestNews.this, AccountRec.class);
                     startActivity(recommendIntent);
                     break;
                 case 1:
                     // Latest news
-                    Intent latestNewsIntent = new Intent(Bookmarks.this, LatestNews.class);
-                    startActivity(latestNewsIntent);
+                    onBackPressed();
                     break;
                 case 2:
                     // Recommendations
-                    //Intent recommendations = new Intent(Bookmarks.this, AIrecommends.class);
+                    //Intent recommendations = new Intent(LatestNews.this, AIrecommends.class);
                     //startActivity(recommendations);
                     break;
                 case 3:
                     // Bookmarks
-                    onBackPressed();
+                    Intent bmIntent = new Intent(LatestNews.this, Bookmarks.class);
+                    startActivity(bmIntent);
                     break;
             }
         }
+    }
+
+    private void setNews(){
+        latest = new latestNewsAPI(this);
+        latest.execute();
     }
 }

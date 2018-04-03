@@ -19,7 +19,6 @@ public class searchFrag extends Fragment{
 
     String[] captions;
     String[] imageURL;
-    private BookmarksDB bm;
     private Context C;
     private static SwipeController swipeController;
 
@@ -27,7 +26,6 @@ public class searchFrag extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         C = getContext();
-        bm = new BookmarksDB(C);
 
         String[] captions = new String[searchAPI.retrieveNews().size()];
         String[] imageURL = new String[searchAPI.retrieveNews().size()];
@@ -51,6 +49,7 @@ public class searchFrag extends Fragment{
                 getActivity().startActivity(intent);
             }
         });
+
         // For endless Scrolling
         /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
             @Override
@@ -65,7 +64,7 @@ public class searchFrag extends Fragment{
                 ContentValues articles = new ContentValues();
 
                 int i = 0;
-                for (HashMap<String, String> item: searchAPI.retrieveNews()){
+                for (HashMap<String, String> item: headlinesAPI.retrieveNews()){
                     if (i == position){
                         articles.put("ARTICLES" , item.get("url"));
                         articles.put("CAPTIONS", item.get("title"));
@@ -74,10 +73,16 @@ public class searchFrag extends Fragment{
                     i++;
                 }
                 Log.d("Bookmarked > ", articles.toString());
-                SQLiteOpenHelper dbHelper = bm;
+                SQLiteOpenHelper dbHelper = MainApp.bmDB;
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.insert("USER_BOOKMARKS", null, articles);
+                if (!MainApp.bmDB.CheckIsDataAlreadyInDBorNot("USER_BOOKMARKS","CAPTIONS",articles.getAsString("CAPTIONS"))){
+                    db.insert("USER_BOOKMARKS", null, articles);
+                    Log.d("Bookmark", ": Success");
+                } else {
+                    Log.d("Bookmark", ": Unsuccessful. Bookmark already exists");
                 }
+                db.close();
+            }
         });
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(newsRecycler);

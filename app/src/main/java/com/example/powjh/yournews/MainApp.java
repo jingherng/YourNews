@@ -20,14 +20,18 @@ public class MainApp extends Activity {
     private ListView menuList;
     private DrawerLayout drawerLayout;
     public static headlinesAPI headlines;
-    private KeywordsDB keywordsDB = new KeywordsDB(this);
-    private UserInfoDB userDB = new UserInfoDB(this);
-    private BookmarksDB bmDB = new BookmarksDB(this);
+    public static KeywordsDB keywordsDB;
+    public static UserInfoDB userDB;
+    public static BookmarksDB bmDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_app);
+
+        keywordsDB = new KeywordsDB(this);
+        userDB = new UserInfoDB(this);
+        bmDB = new BookmarksDB(this);
 
         // Sets Menu
         menu = getResources().getStringArray(R.array.menu);
@@ -93,9 +97,13 @@ public class MainApp extends Activity {
                     break;
                 case 1:
                     // Latest news
+                    Intent latestNewsIntent = new Intent(MainApp.this, LatestNews.class);
+                    startActivity(latestNewsIntent);
                     break;
                 case 2:
                     // Recommendations
+                    //Intent recommendations = new Intent(MainApp.this, AIrecommends.class);
+                    //startActivity(recommendations);
                     break;
                 case 3:
                     // Bookmarks

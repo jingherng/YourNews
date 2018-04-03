@@ -21,11 +21,14 @@
         </activity>
         <activity
             android:name=".MainApp"
-            android:label="@string/title_activity_main_app"></activity>
+            android:label="@string/title_activity_main_app" />
         <activity android:name=".newsWebView" />
         <activity android:name=".AccountRec" />
         <activity android:name=".searchWebView" />
-        <activity android:name=".Bookmarks"></activity>
+        <activity android:name=".bmWebView" />
+        <activity android:name=".Bookmarks" />
+        <activity android:name=".LatestNews" />
+        <activity android:name=".latestNewsWebView"></activity>
     </application>
 
 </manifest>

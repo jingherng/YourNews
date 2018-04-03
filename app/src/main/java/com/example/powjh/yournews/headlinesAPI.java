@@ -44,7 +44,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean>{
 
         // url for latest
         //String url = "https://www.reddit.com/r/worldnews/search?q=url%3A"+newsSourceurl+"&restrict_sr=on&sort=hot&t=all";
-        String emptyurl = "https://www.reddit.com/r/worldnews/top/.json";
+        String emptyurl = "https://www.reddit.com/r/worldnews/hot/.json";
         //String latestNewsStr = webreq.makeWebServiceCall(url, APIrequest.GETRequest);
         String emptyLatestNewsStr = webreq.makeWebServiceCall(emptyurl);
 
@@ -59,13 +59,12 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean>{
 
     @Override
     protected void onPostExecute(Boolean values){
-        super.onPostExecute(values);
         c.findViewById(R.id.progress).setVisibility(View.GONE);
         Fragment fragment1 = new headlinesFrag();
         FragmentManager manager1 = c.getFragmentManager();
         FragmentTransaction transaction1 = manager1.beginTransaction();
         transaction1.add(R.id.LatestHeadlines_box, fragment1);
-        transaction1.commit();
+        transaction1.commitAllowingStateLoss();
     }
 
     private ArrayList<HashMap<String, String>> ParseJSON(String latestNewsStr) {
