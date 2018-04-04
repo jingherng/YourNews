@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import org.json.JSONArray;
@@ -55,7 +60,7 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
 
         // url for latest
         //String url = "https://www.reddit.com/r/worldnews/search.json?q="+userQuery+"+=url%3A"+newsSourceurl+"&restrict_sr=on&sort=relevance&t=hot&limit=5";
-        String emptyurl = "https://www.reddit.com/r/worldnews/search.json?q="+userQuery+"&restrict_sr=on&sort=new&t=all";
+        String emptyurl = "https://www.reddit.com/r/worldnews/search.json?q="+userQuery+"&restrict_sr=on&sort=new&t=all&limit=5";
         //String emptyurl = "https://newsapi.org/v2/everything?q="+userQuery+"&domains=bbc.co.uk,techcrunch.com,engadget.com,cnn.com,nytimes.com"+"&language=en&sortBy=popularity"+"&apiKey=f0da13ca99f44e9b9cc4d6ff7b4d4924";
         //String latestNewsStr = webreq.makeWebServiceCall(url, APIrequest.GETRequest);
         //String emptyLatestNewsStr = "";
@@ -77,8 +82,10 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
         Log.d("Search Results: ", "> " + newsSources);
         Log.d("Search Results: ", "> " + latestNewsStr);*/
         searchNewsList = ParseJSON(emptyLatestNewsStr);
-
-        return true;
+        if (searchNewsList!=null||searchNewsList.size()>0)
+            return true;
+        else
+            return false;
     }
 
 
@@ -97,7 +104,7 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
                 // Get the Array from "children" key
                 JSONArray newsItem = newsData.getJSONArray("children");
 
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < numObject; i++) {
                     JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
 
                     //Getting the title
@@ -156,12 +163,28 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean values){
-        c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
-        Fragment fragment1 = new searchFrag();
-        FragmentManager manager1 = c.getFragmentManager();
-        FragmentTransaction transaction1 = manager1.beginTransaction();
-        transaction1.replace(R.id.SearchResults, fragment1);
-        transaction1.addToBackStack(null);
-        transaction1.commitAllowingStateLoss();
+        if(true) {
+            c.findViewById(R.id.notFound).setVisibility(View.GONE);
+            c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
+            Fragment fragment1 = new searchFrag();
+            FragmentManager manager1 = c.getFragmentManager();
+            FragmentTransaction transaction1 = manager1.beginTransaction();
+            transaction1.replace(R.id.SearchResults, fragment1);
+            transaction1.addToBackStack(null);
+            transaction1.commitAllowingStateLoss();
+        }
+        else {
+            c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
+            c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
+            TextView notfound = c.findViewById(R.id.notFound);
+            notfound.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onPreExecute(){
+        c.findViewById(R.id.searchProgress).setVisibility(View.VISIBLE);
+        c.findViewById(R.id.notFound).setVisibility(View.GONE);
+        c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
     }
 }

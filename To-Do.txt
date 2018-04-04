@@ -1,6 +1,9 @@
 Bugs:
-1. Putin '
-2. NullArray Size
+1. Putin '  (Before put in DB, findAll and replaceAll ("'", "''") in all frags)
 
 Implementation:
-1. AI recommendations
+1. Unbookmark
+2. Endless scroll
+3. News Sources
+4. Sign up button
+5. Link to Telegram bot on login activity

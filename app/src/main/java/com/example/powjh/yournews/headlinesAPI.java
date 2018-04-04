@@ -44,7 +44,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean>{
 
         // url for latest
         //String url = "https://www.reddit.com/r/worldnews/search?q=url%3A"+newsSourceurl+"&restrict_sr=on&sort=hot&t=all";
-        String emptyurl = "https://www.reddit.com/r/worldnews/hot/.json";
+        String emptyurl = "https://www.reddit.com/r/worldnews/hot/.json?limit=5";
         //String latestNewsStr = webreq.makeWebServiceCall(url, APIrequest.GETRequest);
         String emptyLatestNewsStr = webreq.makeWebServiceCall(emptyurl);
 
@@ -82,7 +82,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean>{
                 // Get the Array from "children" key
                 JSONArray newsItem = newsData.getJSONArray("children");
 
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = 0; i < numObject; i++) {
                         JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
 
                         //Getting the title

@@ -28,7 +28,11 @@
         <activity android:name=".bmWebView" />
         <activity android:name=".Bookmarks" />
         <activity android:name=".LatestNews" />
-        <activity android:name=".latestNewsWebView"></activity>
+        <activity android:name=".latestNewsWebView" />
+        <activity
+            android:name=".AIrecommends"
+            android:label="@string/title_activity_airecommends"></activity>
+        <activity android:name=".watsonWebView"/>
     </application>
 
 </manifest>

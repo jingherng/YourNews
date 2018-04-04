@@ -44,7 +44,7 @@ public class bookmarkFrag extends Fragment{
             Log.d("Cursor getString(1): ", "> " + cursor.getString(cursor.getColumnIndex("CAPTIONS")));
             Log.d("Cursor getString(2): ", "> " + cursor.getString(cursor.getColumnIndex("IMAGEURL")));
             url[i] = cursor.getString(cursor.getColumnIndex("ARTICLES"));
-            captions[i] = cursor.getString(cursor.getColumnIndex("CAPTIONS"));
+            captions[i] = cursor.getString(cursor.getColumnIndex("CAPTIONS")).replaceAll("''","'");
             imageURL[i] = cursor.getString(cursor.getColumnIndex("IMAGEURL"));
             i++;
         }

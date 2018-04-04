@@ -50,12 +50,12 @@ public class LatestNews extends Activity {
                     break;
                 case 1:
                     // Latest news
-                    onBackPressed();
+                    //drawerLayout.closeDrawers();
                     break;
                 case 2:
                     // Recommendations
-                    //Intent recommendations = new Intent(LatestNews.this, AIrecommends.class);
-                    //startActivity(recommendations);
+                    Intent recommendations = new Intent(LatestNews.this, AIrecommends.class);
+                    startActivity(recommendations);
                     break;
                 case 3:
                     // Bookmarks

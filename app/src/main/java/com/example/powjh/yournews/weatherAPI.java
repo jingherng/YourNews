@@ -9,6 +9,8 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -70,7 +72,11 @@ class weatherAPI extends AsyncTask<Void, Void, Boolean> {
 
                     //Getting the temp
                     JSONObject main = w.getJSONObject("main");
-                    String temp = Double.toString(Math.round(Double.parseDouble(main.getString(TAG_TEMP)) - 273.15));
+                    //String temp = Double.toString((Double)Math.round(Double.parseDouble(main.getString(TAG_TEMP)) - 273.15));
+                    Double temp = Double.parseDouble(main.getString(TAG_TEMP))-273.15;
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    String finaltemp = df.format(temp);
+
 
                     //Getting the weather icon and description
                     JSONArray weather = w.getJSONArray("weather");
@@ -83,7 +89,7 @@ class weatherAPI extends AsyncTask<Void, Void, Boolean> {
 
                     //formatterOut.format(dateFormatted)
                     hm.put(TAG_DATETIME, dateTime.substring(8,10) + "/" + dateTime.substring(5,7));
-                    hm.put(TAG_TEMP, temp + "°C");
+                    hm.put(TAG_TEMP, finaltemp + "°C");
                     hm.put(TAG_DESCRIPTION, formatDescription);
                     hm.put(TAG_ICON, icon);
 

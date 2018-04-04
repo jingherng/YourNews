@@ -57,12 +57,12 @@ public class Bookmarks extends Activity {
                     break;
                 case 2:
                     // Recommendations
-                    //Intent recommendations = new Intent(Bookmarks.this, AIrecommends.class);
-                    //startActivity(recommendations);
+                    Intent recommendations = new Intent(Bookmarks.this, AIrecommends.class);
+                    startActivity(recommendations);
                     break;
                 case 3:
                     // Bookmarks
-                    onBackPressed();
+                    //drawerLayout.closeDrawers();
                     break;
             }
         }

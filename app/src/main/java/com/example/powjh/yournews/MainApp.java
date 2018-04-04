@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
+
+import java.sql.PreparedStatement;
 
 public class MainApp extends Activity {
     // Menu variables
@@ -20,7 +24,7 @@ public class MainApp extends Activity {
     private ListView menuList;
     private DrawerLayout drawerLayout;
     public static headlinesAPI headlines;
-    public static KeywordsDB keywordsDB;
+    public static watsonDB watsonDB;
     public static UserInfoDB userDB;
     public static BookmarksDB bmDB;
 
@@ -29,7 +33,7 @@ public class MainApp extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_app);
 
-        keywordsDB = new KeywordsDB(this);
+        watsonDB = new watsonDB(this);
         userDB = new UserInfoDB(this);
         bmDB = new BookmarksDB(this);
 
@@ -50,6 +54,8 @@ public class MainApp extends Activity {
         SQLiteOpenHelper dbHelper = userDB;
         LinearLayout searchResults = findViewById(R.id.SearchResults);
         searchResults.setVisibility(View.GONE);
+        TextView notfound = findViewById(R.id.notFound);
+        notfound.setVisibility(View.GONE);
 
         // Sets Search view
         final SearchView search = findViewById(R.id.Search);
@@ -64,12 +70,17 @@ public class MainApp extends Activity {
                 searchResults.setVisibility(View.VISIBLE);
                 LinearLayout rest = findViewById(R.id.rest);
                 rest.setVisibility(View.INVISIBLE);
+
                 // Adds keywords of searches to database
                 ContentValues keywords = new ContentValues();
-                keywords.put("KEYWORDS" , search.getQuery().toString());
-                SQLiteOpenHelper dbHelper = keywordsDB;
+                keywords.put("KEYS" , s);
+                SQLiteOpenHelper dbHelper = watsonDB;
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.update("USER_KEYS", keywords, "_id= ?",new String[]{Integer.toString(1)});
+
+                String query = "INSERT INTO USER_KEYS(KEYS) VALUES (?)";
+                SQLiteStatement stmt = db.compileStatement(query);
+                stmt.bindString(1, s);
+                stmt.execute();
                 db.close();
                 return true;
             }
@@ -102,8 +113,8 @@ public class MainApp extends Activity {
                     break;
                 case 2:
                     // Recommendations
-                    //Intent recommendations = new Intent(MainApp.this, AIrecommends.class);
-                    //startActivity(recommendations);
+                    Intent recommendations = new Intent(MainApp.this, AIrecommends.class);
+                    startActivity(recommendations);
                     break;
                 case 3:
                     // Bookmarks

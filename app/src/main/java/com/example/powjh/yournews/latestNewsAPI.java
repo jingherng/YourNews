@@ -44,7 +44,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean>{
 
         // url for latest
         //String url = "https://www.reddit.com/r/worldnews/search?q=url%3A"+newsSourceurl+"&restrict_sr=on&sort=hot&t=all";
-        String emptyurl = "https://www.reddit.com/r/worldnews/new/.json";
+        String emptyurl = "https://newsapi.org/v2/top-headlines?page=1&language=en&apiKey=f0da13ca99f44e9b9cc4d6ff7b4d4924";
         //String latestNewsStr = webreq.makeWebServiceCall(url, APIrequest.GETRequest);
         String emptyLatestNewsStr = webreq.makeWebServiceCall(emptyurl);
 
@@ -76,20 +76,22 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean>{
                 JSONObject jsonObj = new JSONObject(latestNewsStr);
 
                 // Getting JSON object from key "data"
-                JSONObject newsData = jsonObj.getJSONObject("data");
-                // Get the integer from "dist" key
-                int numObject = newsData.getInt("dist");
-                // Get the Array from "children" key
-                JSONArray newsItem = newsData.getJSONArray("children");
+                JSONArray newsItem = jsonObj.getJSONArray("articles");
+                // Testing 5 objects runtime
+                int numObject = 5;
 
                 for (int i = 0; i < 5; i++) {
-                    JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
+                    JSONObject oneNewsItem = newsItem.getJSONObject(i);
 
                     //Getting the title
                     String title = oneNewsItem.getString("title");
                     //Getting the url
                     String url = oneNewsItem.getString("url");
+                    String pictureLink = oneNewsItem.getString("urlToImage");
+                    String descriptionLink = oneNewsItem.getString("description");
+                    String timeLink = oneNewsItem.getString("publishedAt").substring(0,10);
 
+                    /*
                     String pictureLink ="", descriptionLink="", timeLink="";
 
                     // Using JSoup
@@ -111,6 +113,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean>{
                     for(Element link: time){
                         timeLink = time.attr("content");
                     }
+                    */
 
                     HashMap<String, String> newsdict = new HashMap<String, String>();
 
@@ -128,7 +131,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean>{
                 Log.d("Response Code: ", "> " + newsSources);
                 return latestNewsList;
 
-            }catch(IOException| JSONException e){
+            }catch( JSONException e){
                 e.printStackTrace();
                 return null;
             }

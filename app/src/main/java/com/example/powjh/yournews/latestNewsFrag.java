@@ -44,6 +44,21 @@ public class latestNewsFrag extends Fragment{
         newsRecycler.setAdapter(adapter);
         adapter.setListener(new newsAdapter.Listener(){
             public void onClick(int position){
+                // Add article caption to watson DB
+                ContentValues caption = new ContentValues();
+                int i = 0;
+                for (HashMap<String, String> item: latestNewsAPI.retrieveNews()){
+                    if (i == position){
+                        caption.put("KEYS", item.get("title"));
+                    }
+                    i++;
+                }
+
+                SQLiteOpenHelper dbHelper = MainApp.watsonDB;
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.insert("USER_KEYS", null, caption);
+                db.close();
+
                 Intent intent = new Intent(getActivity(), latestNewsWebView.class);
                 intent.putExtra(latestNewsWebView.TAG, position);
                 getActivity().startActivity(intent);
@@ -66,7 +81,7 @@ public class latestNewsFrag extends Fragment{
                 for (HashMap<String, String> item: latestNewsAPI.retrieveNews()){
                     if (i == position){
                         articles.put("ARTICLES" , item.get("url"));
-                        articles.put("CAPTIONS", item.get("title"));
+                        articles.put("CAPTIONS", item.get("title").replaceAll("'","''"));
                         articles.put("IMAGEURL", item.get("imageurl"));
                     }
                     i++;

@@ -37,7 +37,9 @@
     <string name="yourRecommends">Your Recommendations</string>
     <string name="latestNews">Latest News</string>
     <string name="title_activity_main_app">MainApp</string>
+    <string name="notFound">No results found</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_airecommends">AIrecommends</string>
 </resources>
