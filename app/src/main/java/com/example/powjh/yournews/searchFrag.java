@@ -23,7 +23,7 @@ public class searchFrag extends Fragment{
     private static SwipeController swipeController;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         C = getContext();
 
@@ -31,7 +31,7 @@ public class searchFrag extends Fragment{
         String[] imageURL = new String[searchAPI.retrieveNews().size()];
 
         int i = 0;
-        for (HashMap<String, String> item: searchAPI.retrieveNews()){
+        for (HashMap<String, String> item : searchAPI.retrieveNews()) {
             captions[i] = item.get("title");
             imageURL[i] = item.get("imageurl");
             i++;
@@ -42,13 +42,13 @@ public class searchFrag extends Fragment{
         RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
         newsRecycler.setAdapter(adapter);
-        adapter.setListener(new newsAdapter.Listener(){
-            public void onClick(int position){
+        adapter.setListener(new newsAdapter.Listener() {
+            public void onClick(int position) {
                 // Add article caption to watson DB
                 ContentValues caption = new ContentValues();
                 int i = 0;
-                for (HashMap<String, String> item: searchAPI.retrieveNews()){
-                    if (i == position){
+                for (HashMap<String, String> item : searchAPI.retrieveNews()) {
+                    if (i == position) {
                         caption.put("KEYS", item.get("title"));
                     }
                     i++;
@@ -65,12 +65,14 @@ public class searchFrag extends Fragment{
         });
 
         // For endless Scrolling
-        /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
+        newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                loadNextDataFromApi();
+            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler) {
+                //loadNextDataFromApi();
             }
-        });*/
+            
+        });
+
 
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override

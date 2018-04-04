@@ -58,7 +58,7 @@ public class MainApp extends Activity {
         notfound.setVisibility(View.GONE);
 
         // Sets Search view
-        final SearchView search = findViewById(R.id.Search);
+        SearchView search = findViewById(R.id.Search);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override

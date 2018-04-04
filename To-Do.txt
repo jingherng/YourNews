@@ -1,9 +1,11 @@
 Bugs:
-1. Putin '  (Before put in DB, findAll and replaceAll ("'", "''") in all frags)
+1. No results found not appearing
 
 Implementation:
 1. Unbookmark
 2. Endless scroll
 3. News Sources
-4. Sign up button
+4. Sign up button (Password have 1 alphanumeric, numeric & length 8-16 characters)
 5. Link to Telegram bot on login activity
+6. Home function
+7. Design principles

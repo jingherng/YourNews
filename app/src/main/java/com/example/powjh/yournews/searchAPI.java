@@ -22,10 +22,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class searchAPI extends AsyncTask<Void, Void, Boolean> {
+class searchAPI extends AsyncTask<Boolean, Void, Boolean> {
 
     private static ArrayList<HashMap<String, String>> searchNewsList;
 
@@ -47,7 +50,7 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
 
     // Do in background
     @Override
-    protected Boolean doInBackground(Void... Void) {
+    protected Boolean doInBackground(Boolean... values) {
         // Creating service handler class instance
         APIrequest webreq = new APIrequest();
 
@@ -82,8 +85,12 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
         Log.d("Search Results: ", "> " + newsSources);
         Log.d("Search Results: ", "> " + latestNewsStr);*/
         searchNewsList = ParseJSON(emptyLatestNewsStr);
-        if (searchNewsList!=null||searchNewsList.size()>0)
+        if (searchNewsList==null){
+            return false;
+        }
+        else if (searchNewsList.size()>0){
             return true;
+        }
         else
             return false;
     }
@@ -106,24 +113,38 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
 
                 for (int i = 0; i < numObject; i++) {
                     JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
-
-                    //Getting the title
-                    String title = oneNewsItem.getString("title");
-                    //Getting the url
-                    String url = oneNewsItem.getString("url");
-
-                    String pictureLink ="", descriptionLink="", timeLink="";
-
                     // Using JSoup
-                    Document doc = Jsoup.connect(url).get();
-                    // Scrapping for website URL
-                    Elements picture= doc.getElementsByAttributeValue("property","og:image");
-                    for (Element link : picture) {
-                        pictureLink = picture.attr("content");
-                        break;
+                    try {
+                        //Getting the title
+                        String title = oneNewsItem.getString("title");
+                        //Getting the url
+                        String url = oneNewsItem.getString("url");
+
+                        String pictureLink ="";// descriptionLink="", timeLink="";
+                        Document doc = Jsoup.connect(url).get();
+                        Elements picture= doc.getElementsByAttributeValue("property","og:image");
+                        for (Element link : picture) {
+                            pictureLink = picture.attr("content");
+                            break;
+                        }
+
+                        HashMap<String, String> newsdict = new HashMap<String, String>();
+
+                        //formatterOut.format(dateFormatted)
+                        newsdict.put("title", title);
+                        newsdict.put("url", url);
+                        newsdict.put("imageurl", pictureLink);
+                        /*newsdict.put("description", descriptionLink);
+                        newsdict.put("time", timeLink);*/
+
+                        latestNewsList.add(newsdict);
+                    }
+                    catch(Exception e){
+                      //Does Nothing
                     }
 
-                    // Scrapping for website description
+
+                    /*// Scrapping for website description
                     Elements description= doc.getElementsByAttributeValue("property","og:description");
                     for (Element link : description) {
                         descriptionLink = description.attr("content");
@@ -132,26 +153,14 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
                     Elements time= doc.getElementsByAttributeValue("property","article:published_time");
                     for(Element link: time){
                         timeLink = time.attr("content");
-                    }
-
-                    HashMap<String, String> newsdict = new HashMap<String, String>();
-
-                    //formatterOut.format(dateFormatted)
-                    newsdict.put("title", title);
-                    newsdict.put("url", url);
-                    newsdict.put("imageurl", pictureLink);
-                    newsdict.put("description", descriptionLink);
-                    newsdict.put("time", timeLink);
-
-                    latestNewsList.add(newsdict);
+                    }*/
 
                 }
 
                 Log.d("Search Results: ", "> " + latestNewsList);
 
-
                 return latestNewsList;
-            }catch(IOException| JSONException e){
+            }catch( JSONException e){
                 e.printStackTrace();
                 return null;
             }
@@ -176,8 +185,7 @@ class searchAPI extends AsyncTask<Void, Void, Boolean> {
         else {
             c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
             c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
-            TextView notfound = c.findViewById(R.id.notFound);
-            notfound.setVisibility(View.VISIBLE);
+            c.findViewById(R.id.notFound).setVisibility(View.VISIBLE);
         }
     }
 
