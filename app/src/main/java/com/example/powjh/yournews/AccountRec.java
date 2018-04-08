@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.*;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,7 +129,7 @@ public class AccountRec extends Activity {
         }
 
         // String builder for newsSourcesURL
-        /*try{
+        try{
             StringBuilder stringBuilder = new StringBuilder();
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query("USER_INFO",
@@ -222,15 +223,22 @@ public class AccountRec extends Activity {
                     }
                 }
             }
-
-            headlinesAPI.newsSources = stringBuilder.toString();
+            String finalString = stringBuilder.toString();
+            if (finalString.length()>0) {
+                finalString = finalString.substring(1);
+            }
+            Log.d("This is my source: ",finalString);
+            headlinesAPI.newsSources = finalString;
+            latestNewsAPI.newsSources = finalString;
+            searchAPI.newsSources = finalString;
+            
 
         }catch(SQLException e){
             Toast toast = Toast.makeText(this, "Sources not updated", Toast.LENGTH_SHORT);
             toast.show();
         }
 
-        // Update public static final string newsSources in the format: bloomberg|bbc*/
+        // Update public static final string newsSources in the format: bloomberg|bbc
 
         finish();
     }

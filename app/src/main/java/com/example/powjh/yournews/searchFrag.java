@@ -68,7 +68,7 @@ public class searchFrag extends Fragment{
         newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler) {
-                //loadNextDataFromApi();
+
             }
             
         });
