@@ -27,18 +27,15 @@ import java.util.Set;
 class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
 
     private static ArrayList<HashMap<String, String>> watsonNewsList = new ArrayList<HashMap<String, String>>();
-    private static ArrayList<HashMap<String, String>> tempWatsonNewsList;
-    private Set<HashMap<String,String>> watsonFinalList = new HashSet<>();
     
 
     Activity c;
 
     private String userQuery;
 
-    private watson watson;
+    private facadeWatson watson;
     private NewsSite redditSearch;
     private NewsFactory newsFactory;
-    private JSONparser jsonManager;
     
     public static ArrayList<HashMap<String,String>> retrieveNews(){
         return watsonNewsList;
@@ -46,10 +43,6 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
 
     public mrWatson(Activity c){
         this.c = c;
-        watson = new watson();
-        newsFactory = new NewsFactory();
-        redditSearch = newsFactory.makeNewsSite("search","",userQuery);
-        jsonManager = JSONparser.getInstance();
         
     }
     
@@ -67,17 +60,7 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
 
-        ArrayList<String> resultList = watson.getQueryKeyword();
-        
-        for (String result : resultList) {
-            Log.d("String",result);
-            setQuery(result);
-            String loadNewsStr;
-            loadNewsStr = redditSearch.loadInitialData();
-            tempWatsonNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
-            watsonFinalList.addAll(tempWatsonNewsList);
-        }
-        watsonNewsList.addAll(watsonFinalList);
+        watsonNewsList = watson.getResults();
         return true;
     }
 

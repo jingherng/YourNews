@@ -62,13 +62,6 @@ public class bookmarkFrag extends Fragment{
                 getActivity().startActivity(intent);
             }
         });
-        // For endless Scrolling
-        /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
-            @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                loadNextDataFromApi();
-            }
-        });*/
 
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override

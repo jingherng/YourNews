@@ -40,11 +40,6 @@ public class searchFrag extends Fragment{
             imageURL[i] = item.get("imageurl");
             i++;
         }
-        /*for (HashMap<String, String> item : searchAPI.retrieveNews()) {
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
-            i++;
-        }*/
 
         newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

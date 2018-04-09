@@ -79,14 +79,6 @@ public class watsonFrag extends Fragment{
             }
         });
 
-        // For endless Scrolling
-        /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
-            @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                loadNextDataFromApi();
-            }
-        });*/
-
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {

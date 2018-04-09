@@ -23,17 +23,18 @@ public class headlinesFrag extends Fragment{
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
+    private EndlessScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         C = getContext();
 
-        String[] captions = new String[headlinesAPI.getIteratorSize()];
-        String[] imageURL = new String[headlinesAPI.getIteratorSize()];
+        String[] captions = new String[MainApp.headlines.getIteratorSize()];
+        String[] imageURL = new String[MainApp.headlines.getIteratorSize()];
 
         int i = 0;
-        myIterator = headlinesAPI.createStaticIterator();
+        myIterator = MainApp.headlines.createIterator();
         while(myIterator.hasNext())
         {
             HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
@@ -41,16 +42,6 @@ public class headlinesFrag extends Fragment{
             imageURL[i] = item.get("imageurl");
             i++;
         }
-
-        /*String[] captions = new String[headlinesAPI.retrieveNews().size()];
-        String[] imageURL = new String[headlinesAPI.retrieveNews().size()];
-
-        int i = 0;
-        for (HashMap<String, String> item: headlinesAPI.retrieveNews()){
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
-            i++;
-        }*/
 
         newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -62,7 +53,7 @@ public class headlinesFrag extends Fragment{
                 // Add article caption to watson DB
                 ContentValues caption = new ContentValues();
                 int i = 0;
-                for (HashMap<String, String> item: headlinesAPI.retrieveNews()){
+                for (HashMap<String, String> item: MainApp.headlines.retrieveNews()){
                     if (i == position){
                         caption.put("KEYS", item.get("title"));
                     }
@@ -78,13 +69,6 @@ public class headlinesFrag extends Fragment{
                 getActivity().startActivity(intent);
             }
         });
-        // For endless Scrolling
-        /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
-            @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                loadNextDataFromApi();
-            }
-        });*/
 
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
@@ -92,7 +76,7 @@ public class headlinesFrag extends Fragment{
                 ContentValues articles = new ContentValues();
 
                 int i = 0;
-                for (HashMap<String, String> item: headlinesAPI.retrieveNews()){
+                for (HashMap<String, String> item: MainApp.headlines.retrieveNews()){
                     if (i == position){
                         articles.put("ARTICLES" , item.get("url"));
                         articles.put("CAPTIONS", item.get("title").replaceAll("'","''"));
@@ -122,6 +106,16 @@ public class headlinesFrag extends Fragment{
                 swipeController.onDraw(c);
             }
         });
+
+        // For endless Scrolling
+        scrollListener = new EndlessScrollListener(layoutManager){
+            @Override
+            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
+                MainApp.headlines.runMoreHeadLines();
+            }
+        };
+
+        newsRecycler.addOnScrollListener(scrollListener);
 
         return newsRecycler;
     }

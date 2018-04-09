@@ -26,6 +26,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     String loadNewsStr;
     private NewsSite redditHot;
     private JSONparser jsonManager;
+    public int data;
 
     Activity c;
     public static String newsSources = "";
@@ -43,16 +44,15 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     @Override
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
-        loadNewsStr = redditHot.loadInitialData();
-        newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
-        if (newsList==null){
-            return false;
-        }
-        else if (newsList.size()>0){
-            return true;
-        }
-        else
-            return false;
+            loadNewsStr = redditHot.loadInitialData();
+            newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+            data++;
+            if (newsList == null) {
+                return false;
+            } else if (newsList.size() > 0) {
+                return true;
+            } else
+                return false;
     }
  
     private String getLatestName() {
@@ -84,16 +84,36 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     public Iterator createIterator() {
         return retrieveNews().iterator();
     }
-    public static Iterator createStaticIterator() {
-        return retrieveNews().iterator();
-    }
-    public static int getIteratorSize(){
-        Iterator myIterator = createStaticIterator();
+    public int getIteratorSize(){
+        Iterator myIterator = createIterator();
         int i = 0;
         while(myIterator.hasNext()) {
             i++;
             myIterator.next();
         }
         return i;
+    }
+
+    public void runMoreHeadLines(){
+        moreHeadlines more = new moreHeadlines();
+        more.execute();
+    }
+
+    class moreHeadlines extends AsyncTask<Void, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void...Void){
+            return moreNews();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean values){
+            c.findViewById(R.id.progress).setVisibility(View.GONE);
+            Fragment fragment1 = new headlinesFrag();
+            FragmentManager manager1 = c.getFragmentManager();
+            FragmentTransaction transaction1 = manager1.beginTransaction();
+            transaction1.add(R.id.LatestHeadlines_box, fragment1);
+            transaction1.commitAllowingStateLoss();
+        }
     }
 }

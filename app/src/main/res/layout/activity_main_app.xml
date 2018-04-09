@@ -56,7 +56,6 @@
 
         </LinearLayout>
         <LinearLayout
-            android:paddingLeft="8dp"
             android:id="@+id/rest"
             android:orientation="vertical"
             android:layout_width="match_parent"

@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -27,6 +30,7 @@ public class MainApp extends Activity {
     public static watsonDB watsonDB;
     public static UserInfoDB userDB;
     public static BookmarksDB bmDB;
+    private EndlessScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +94,8 @@ public class MainApp extends Activity {
                 return true;
             }
         });
-    }
 
+    }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
