@@ -54,7 +54,7 @@ public class JSONparser {
 						int numObject = newsData.getInt("dist");
 						// Get the Array from "children" key
 						JSONArray newsItem = newsData.getJSONArray("children");
-						ArrayList <String> titles = new ArrayList<String>();
+						ArrayList <String> urls = new ArrayList<String>();
 
 						for (int i = 0; i < numObject; i++) {
 							JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
@@ -74,7 +74,7 @@ public class JSONparser {
 									pictureLink = picture.attr("content");
 									break;
 								}
-								if (titles.contains(title)){}
+								if (urls.contains(url)){}
 								else{
 								HashMap<String, String> newsdict = new HashMap<String, String>();
 
@@ -83,7 +83,7 @@ public class JSONparser {
 								newsdict.put("url", url);
 								newsdict.put("imageurl", pictureLink);
 								newsdict.put("name", name);
-	                        	titles.add(title);
+	                        	urls.add(title);
 	                        	redditNewsList.add(newsdict);
 								}
 							} catch (JSONException | IOException e) {
@@ -131,7 +131,7 @@ public class JSONparser {
 							String timeLink = oneNewsItem.getString("publishedAt").substring(0, 10);
 
 
-							if (titles.contains(title)) {
+							if (titles.contains(url)) {
 							} else {
 								HashMap<String, String> latestnewsdict = new HashMap<String, String>();
 
@@ -141,7 +141,7 @@ public class JSONparser {
 								latestnewsdict.put("imageurl", pictureLink);
 								latestnewsdict.put("description", descriptionLink);
 								latestnewsdict.put("time", timeLink);
-								titles.add(title);
+								titles.add(url);
 								newsAPINewsList.add(latestnewsdict);
 							}
 

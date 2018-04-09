@@ -78,7 +78,6 @@ public class latestNewsFrag extends Fragment{
             public void onLoadMore(int page, int totalItemCounts, RecyclerView view){
                 LatestNews.latest.runMoreLatest();
                 adapter.notifyDataSetChanged();
-
             }
         });
 

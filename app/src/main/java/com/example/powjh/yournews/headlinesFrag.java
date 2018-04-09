@@ -49,8 +49,9 @@ public class headlinesFrag extends Fragment{
 
         final newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        final RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
+        RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
+        newsRecycler.setAdapter(adapter);
 
         // For endless Scrolling
         scrollListener = new EndlessScrollListener(layoutManager){
