@@ -39,7 +39,7 @@ public class watson {
         String limit = "25";
         Cursor cursor = sqldb.query(table, columns, null, null, groupBy, having, orderBy, limit);
         while (cursor.moveToNext()){
-            Log.d("Cursor: ", cursor.getString(cursor.getColumnIndex("KEYS")));
+            //Log.d("Cursor: ", cursor.getString(cursor.getColumnIndex("KEYS")));
             this.input += cursor.getString(cursor.getColumnIndex("KEYS"));
         }
         if (this.input!=null)

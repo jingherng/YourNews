@@ -40,6 +40,7 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
     private NewsSite redditSearch;
     private JSONparser jsonManager;
     public static String newsSources = "";
+    private String loadNewsStr;
 
     public static ArrayList<HashMap<String,String>> retrieveNews(){
         return searchNewsList;
@@ -67,7 +68,7 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
         // Creating service handler class instance
     	
         redditSearch = newsFactory.makeNewsSite("search",newsSources,userQuery);
-        String loadNewsStr;
+
         loadNewsStr = redditSearch.loadInitialData();
         Log.d("Hello, ",loadNewsStr);
         Log.d("NewsSource, ",newsSources);
@@ -86,7 +87,17 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
     	HashMap<String, String> item = searchNewsList.get(searchNewsList.size()-1);
     	return item.get("name");
     }
-    
+
+    // Search for more news
+    public Boolean moreNews(){
+        if (searchNewsList==null || searchNewsList.size()<1)
+            return false;
+        loadNewsStr = redditSearch.loadMoreData(getLatestName());
+        searchNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+        if (searchNewsList!=null && searchNewsList.size()>0)
+            return true;
+        return false;
+    }
 
     @Override
     protected void onPostExecute(Boolean values){
@@ -114,8 +125,19 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
         c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
     }
 
-	@Override
 	public Iterator createIterator() {
 		return retrieveNews().iterator();
 	}
+    public static Iterator createStaticIterator() {
+        return retrieveNews().iterator();
+    }
+	public static int getIteratorSize(){
+        Iterator myIterator = createStaticIterator();
+        int i = 0;
+        while(myIterator.hasNext()) {
+            i++;
+            myIterator.next();
+        }
+        return i;
+    }
 }

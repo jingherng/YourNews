@@ -1,6 +1,7 @@
 package com.example.powjh.yournews;
 
 import android.util.Log;
+import java.util.Random;
 
 public class RedditSearch implements NewsSite{
 	
@@ -8,8 +9,10 @@ public class RedditSearch implements NewsSite{
 	public String userQuery;
 	String newsSources;
 	APIrequest webreq;
+	Random rand;
 
 	public RedditSearch(String newsSources, String userQuery) {
+		rand = new Random();
 		this.newsSources = newsSources;
 		this.newsSources = formatString();
 		this.userQuery = userQuery;
@@ -23,13 +26,13 @@ public class RedditSearch implements NewsSite{
 	}
 	
 	public void setUserQuery(String newQuery) {
-		this.userQuery = newQuery;}
+		this.userQuery = newQuery;
+	}
 	
 	private String formatString() {
-		Log.d("Before",newsSources);
-		String newsSourceurl = newsSources.replaceAll("\\|","+OR+");
-		Log.d("After",newsSourceurl);
-		return newsSourceurl;
+		String[] newsSourceurlList = newsSources.split("\\|");
+		int randomNumber = rand.nextInt(newsSourceurlList.length);
+		return newsSourceurlList[randomNumber];
 	}
 
 	public String loadInitialData() {

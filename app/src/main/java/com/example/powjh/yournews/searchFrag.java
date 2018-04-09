@@ -14,11 +14,13 @@ import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class searchFrag extends Fragment{
 
     String[] captions;
     String[] imageURL;
+    private Iterator myIterator;
     private Context C;
     private static SwipeController swipeController;
 
@@ -26,16 +28,23 @@ public class searchFrag extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         C = getContext();
-
-        String[] captions = new String[searchAPI.retrieveNews().size()];
-        String[] imageURL = new String[searchAPI.retrieveNews().size()];
+        String[] captions = new String[searchAPI.getIteratorSize()];
+        String[] imageURL = new String[searchAPI.getIteratorSize()];
 
         int i = 0;
-        for (HashMap<String, String> item : searchAPI.retrieveNews()) {
+        myIterator = searchAPI.createStaticIterator();
+        while(myIterator.hasNext())
+        {
+            HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
             captions[i] = item.get("title");
             imageURL[i] = item.get("imageurl");
             i++;
         }
+        /*for (HashMap<String, String> item : searchAPI.retrieveNews()) {
+            captions[i] = item.get("title");
+            imageURL[i] = item.get("imageurl");
+            i++;
+        }*/
 
         newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

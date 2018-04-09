@@ -23,6 +23,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
 
     private static ArrayList<HashMap<String, String>> newsList;
     private NewsFactory newsFactory = new NewsFactory();
+    String loadNewsStr;
     private NewsSite redditHot;
     private JSONparser jsonManager;
 
@@ -42,7 +43,6 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     @Override
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
-        String loadNewsStr;
         loadNewsStr = redditHot.loadInitialData();
         newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
         if (newsList==null){
@@ -60,6 +60,16 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     	return item.get("name");
     }
 
+    public Boolean moreNews(){
+        if (newsList==null || newsList.size()<1)
+            return false;
+        loadNewsStr = redditHot.loadMoreData(getLatestName());
+        newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+        if (newsList!=null && newsList.size()>0)
+            return true;
+        return false;
+    }
+
     @Override
     protected void onPostExecute(Boolean values){
         c.findViewById(R.id.progress).setVisibility(View.GONE);
@@ -71,7 +81,19 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     }
 
 	@Override
-	public Iterator createIterator() {
-		return retrieveNews().iterator();
-	}
+    public Iterator createIterator() {
+        return retrieveNews().iterator();
+    }
+    public static Iterator createStaticIterator() {
+        return retrieveNews().iterator();
+    }
+    public static int getIteratorSize(){
+        Iterator myIterator = createStaticIterator();
+        int i = 0;
+        while(myIterator.hasNext()) {
+            i++;
+            myIterator.next();
+        }
+        return i;
+    }
 }

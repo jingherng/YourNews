@@ -56,6 +56,7 @@ public class JSONparser {
 						int numObject = newsData.getInt("dist");
 						// Get the Array from "children" key
 						JSONArray newsItem = newsData.getJSONArray("children");
+						ArrayList <String> titles = new ArrayList<String>();
 
 						for (int i = 0; i < numObject; i++) {
 							JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
@@ -75,7 +76,8 @@ public class JSONparser {
 									pictureLink = picture.attr("content");
 									break;
 								}
-
+								if (titles.contains(title)){}
+								else{
 								HashMap<String, String> newsdict = new HashMap<String, String>();
 
 								//formatterOut.format(dateFormatted)
@@ -83,26 +85,12 @@ public class JSONparser {
 								newsdict.put("url", url);
 								newsdict.put("imageurl", pictureLink);
 								newsdict.put("name", name);
-	                        /*newsdict.put("description", descriptionLink);
-	                        newsdict.put("time", timeLink);*/
-
-								redditNewsList.add(newsdict);
+	                        	titles.add(title);
+	                        	redditNewsList.add(newsdict);
+								}
 							} catch (JSONException | IOException e) {
 								//Does Nothing
 							}
-
-
-	                    /*// Scrapping for website description
-	                    Elements description= doc.getElementsByAttributeValue("property","og:description");
-	                    for (Element link : description) {
-	                        descriptionLink = description.attr("content");
-	                    }
-	                    // Scrapping for published time
-	                    Elements time= doc.getElementsByAttributeValue("property","article:published_time");
-	                    for(Element link: time){
-	                        timeLink = time.attr("content");
-	                    }*/
-
 						}
 
 						Log.d("Search Results: ", "> " + redditNewsList);
@@ -121,7 +109,7 @@ public class JSONparser {
 					try {
 						//Hashmap for latest news articles
 						ArrayList<HashMap<String, String>> newsAPINewsList = new ArrayList<HashMap<String, String>>();
-
+						ArrayList<String> titles = new ArrayList<String>();
 						JSONObject jsonObj = new JSONObject(json);
 
 						// Getting JSON object from key "data"
@@ -129,7 +117,7 @@ public class JSONparser {
 
 						// Testing 5 objects runtime
 						int numObject = 5;
-						if (newsItem==null || newsItem.length()<5){
+						if (newsItem == null || newsItem.length() < 5) {
 							return null;
 						}
 
@@ -144,46 +132,25 @@ public class JSONparser {
 							String descriptionLink = oneNewsItem.getString("description");
 							String timeLink = oneNewsItem.getString("publishedAt").substring(0, 10);
 
-	                    /*
-	                    String pictureLink ="", descriptionLink="", timeLink="";
 
-	                    // Using JSoup
-	                    Document doc = Jsoup.connect(url).get();
-	                    // Scrapping for website URL
-	                    Elements picture= doc.getElementsByAttributeValue("property","og:image");
-	                    for (Element link : picture) {
-	                        pictureLink = picture.attr("content");
-	                        break;
-	                    }
+							if (titles.contains(title)) {
+							} else {
+								HashMap<String, String> latestnewsdict = new HashMap<String, String>();
 
-	                    // Scrapping for website description
-	                    Elements description= doc.getElementsByAttributeValue("property","og:description");
-	                    for (Element link : description) {
-	                        descriptionLink = description.attr("content");
-	                    }
-	                    // Scrapping for published time
-	                    Elements time= doc.getElementsByAttributeValue("property","article:published_time");
-	                    for(Element link: time){
-	                        timeLink = time.attr("content");
-	                    }
-	                    */
-
-							HashMap<String, String> newsdict = new HashMap<String, String>();
-
-							//formatterOut.format(dateFormatted)
-							newsdict.put("title", title);
-							newsdict.put("url", url);
-							newsdict.put("imageurl", pictureLink);
-							newsdict.put("description", descriptionLink);
-							newsdict.put("time", timeLink);
-
-							newsAPINewsList.add(newsdict);
+								//formatterOut.format(dateFormatted)
+								latestnewsdict.put("title", title);
+								latestnewsdict.put("url", url);
+								latestnewsdict.put("imageurl", pictureLink);
+								latestnewsdict.put("description", descriptionLink);
+								latestnewsdict.put("time", timeLink);
+								titles.add(title);
+								newsAPINewsList.add(latestnewsdict);
+							}
 
 						}
-						Log.d("Response Code: ", "> " + newsAPINewsList);
+						Log.d("Search Results: ", "> " + newsAPINewsList);
 						return newsAPINewsList;
-
-					} catch (JSONException e) {
+					}catch (JSONException e) {
 						e.printStackTrace();
 						return null;
 					}

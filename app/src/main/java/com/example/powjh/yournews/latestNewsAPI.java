@@ -24,6 +24,8 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     private static ArrayList<HashMap<String, String>> newsList;
     private NewsFactory newsFactory = new NewsFactory();
     private JSONparser jsonManager;
+    String loadNewsStr;
+    NewsSite latestNews;
 
     Activity c;
     public static String newsSources = "";
@@ -40,8 +42,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     @Override
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
-        NewsSite latestNews = newsFactory.makeNewsSite("latest",newsSources,"");
-        String loadNewsStr;
+        latestNews = newsFactory.makeNewsSite("latest",newsSources,"");
         loadNewsStr = latestNews.loadInitialData();
         newsList = jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr);
         if (newsList==null){
@@ -53,7 +54,16 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
         else
             return false;
     }
-   
+
+    public Boolean moreNews(){
+        if (newsList==null || newsList.size()<1)
+            return false;
+        loadNewsStr = latestNews.loadMoreData("");
+        newsList = jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr);
+        if (newsList!=null && newsList.size()>0)
+            return true;
+        return false;
+    }
     
     @Override
     protected void onPostExecute(Boolean values){
@@ -66,8 +76,20 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     }
 
 	@Override
-	public Iterator createIterator() {
-		return retrieveNews().iterator();
-	}
+    public Iterator createIterator() {
+        return retrieveNews().iterator();
+    }
+    public static Iterator createStaticIterator() {
+        return retrieveNews().iterator();
+    }
+    public static int getIteratorSize(){
+        Iterator myIterator = createStaticIterator();
+        int i = 0;
+        while(myIterator.hasNext()) {
+            i++;
+            myIterator.next();
+        }
+        return i;
+    }
 
 }

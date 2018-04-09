@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class watsonFrag extends Fragment{
 
@@ -21,13 +22,27 @@ public class watsonFrag extends Fragment{
     String[] imageURL;
     private Context C;
     private static SwipeController swipeController;
+    private Iterator myIterator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         C = getContext();
 
-        String[] captions = new String[mrWatson.retrieveNews().size()];
+        String[] captions = new String[mrWatson.getIteratorSize()];
+        String[] imageURL = new String[mrWatson.getIteratorSize()];
+
+        int i = 0;
+        myIterator = mrWatson.createStaticIterator();
+        while(myIterator.hasNext())
+        {
+            HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
+            captions[i] = item.get("title");
+            imageURL[i] = item.get("imageurl");
+            i++;
+        }
+
+        /*String[] captions = new String[mrWatson.retrieveNews().size()];
         String[] imageURL = new String[mrWatson.retrieveNews().size()];
 
         int i = 0;
@@ -35,7 +50,7 @@ public class watsonFrag extends Fragment{
             captions[i] = item.get("title");
             imageURL[i] = item.get("imageurl");
             i++;
-        }
+        }*/
 
         newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

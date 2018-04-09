@@ -60,12 +60,7 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
     
     public void setQuery(String s){
         this.userQuery = s;
-        if (redditSearch != null) {
-        	((RedditSearch) redditSearch).setUserQuery(s);
-        }
-        else {
-        	redditSearch = newsFactory.makeNewsSite("search","",userQuery);
-        }
+        redditSearch = newsFactory.makeNewsSite("search","",userQuery);
     }
     // Do in background
     @Override
@@ -75,12 +70,13 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
         ArrayList<String> resultList = watson.getQueryKeyword();
         
         for (String result : resultList) {
+            Log.d("String",result);
+            setQuery(result);
             String loadNewsStr;
             loadNewsStr = redditSearch.loadInitialData();
             tempWatsonNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
             watsonFinalList.addAll(tempWatsonNewsList);
         }
-
         watsonNewsList.addAll(watsonFinalList);
         return true;
     }
@@ -98,7 +94,19 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
     }
 
 	@Override
-	public Iterator createIterator() {
-		return retrieveNews().iterator();
-	}
+    public Iterator createIterator() {
+        return retrieveNews().iterator();
+    }
+    public static Iterator createStaticIterator() {
+        return retrieveNews().iterator();
+    }
+    public static int getIteratorSize(){
+        Iterator myIterator = createStaticIterator();
+        int i = 0;
+        while(myIterator.hasNext()) {
+            i++;
+            myIterator.next();
+        }
+        return i;
+    }
 }
