@@ -17,7 +17,7 @@ public class LatestNews extends Activity {
     private String[] menu;
     private ListView menuList;
     private DrawerLayout drawerLayout;
-    private latestNewsAPI latest;
+    public static latestNewsAPI latest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

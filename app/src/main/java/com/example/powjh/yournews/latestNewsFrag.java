@@ -7,19 +7,22 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Canvas;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class latestNewsFrag extends Fragment{
 
-    String[] captions;
-    String[] imageURL;
+    ArrayList<String> captions;
+    ArrayList<String> imageURL;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
@@ -29,32 +32,22 @@ public class latestNewsFrag extends Fragment{
 
         C = getContext();
 
-        String[] captions = new String[latestNewsAPI.getIteratorSize()];
-        String[] imageURL = new String[latestNewsAPI.getIteratorSize()];
+        ArrayList<String> captions = new ArrayList<String>();
+        ArrayList<String> imageURL = new ArrayList<String>();
 
         int i = 0;
         myIterator = latestNewsAPI.createStaticIterator();
         while(myIterator.hasNext())
         {
             HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
+            captions.add(item.get("title"));
+            imageURL.add(item.get("imageurl"));
             i++;
         }
 
-        /*String[] captions = new String[latestNewsAPI.retrieveNews().size()];
-        String[] imageURL = new String[latestNewsAPI.retrieveNews().size()];
-
-        int i = 0;
-        for (HashMap<String, String> item: latestNewsAPI.retrieveNews()){
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
-            i++;
-        }*/
-
-        newsAdapter adapter = new newsAdapter(captions, imageURL);
+        final newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
+        final RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
         newsRecycler.setAdapter(adapter);
         adapter.setListener(new newsAdapter.Listener(){
@@ -80,12 +73,14 @@ public class latestNewsFrag extends Fragment{
             }
         });
         // For endless Scrolling
-        /*newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
+        newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager){
             @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                loadNextDataFromApi();
+            public void onLoadMore(int page, int totalItemCounts, RecyclerView view){
+                LatestNews.latest.runMoreLatest();
+                adapter.notifyDataSetChanged();
+
             }
-        });*/
+        });
 
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override

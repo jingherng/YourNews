@@ -14,12 +14,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class bookmarkFrag extends Fragment{
 
-    String[] captions;
-    String[] imageURL;
+    ArrayList<String> captions;
+    ArrayList<String> imageURL;
     String[] url;
     private Context C;
     private static SwipeController swipeController;
@@ -36,16 +38,16 @@ public class bookmarkFrag extends Fragment{
                 null, null, null, null);
         int i = 0;
         url = new String[cursor.getCount()];
-        captions = new String[cursor.getCount()];
-        imageURL = new String[cursor.getCount()];
+        captions = new ArrayList<String>();
+        imageURL = new ArrayList<String>();
         Log.d("Cursor Count: ", "> " + cursor.getCount());
         while (cursor.moveToNext()){
             Log.d("Cursor getString(0): ", "> " + cursor.getString(cursor.getColumnIndex("ARTICLES")));
             Log.d("Cursor getString(1): ", "> " + cursor.getString(cursor.getColumnIndex("CAPTIONS")));
             Log.d("Cursor getString(2): ", "> " + cursor.getString(cursor.getColumnIndex("IMAGEURL")));
             url[i] = cursor.getString(cursor.getColumnIndex("ARTICLES"));
-            captions[i] = cursor.getString(cursor.getColumnIndex("CAPTIONS")).replaceAll("''","'");
-            imageURL[i] = cursor.getString(cursor.getColumnIndex("IMAGEURL"));
+            captions.add(cursor.getString(cursor.getColumnIndex("CAPTIONS")).replaceAll("''","'"));
+            imageURL.add(cursor.getString(cursor.getColumnIndex("IMAGEURL")));
             i++;
         }
         cursor.close();

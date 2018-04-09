@@ -26,7 +26,6 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     String loadNewsStr;
     private NewsSite redditHot;
     private JSONparser jsonManager;
-    public int data;
 
     Activity c;
     public static String newsSources = "";
@@ -46,7 +45,6 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
         // Creating service handler class instance
             loadNewsStr = redditHot.loadInitialData();
             newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
-            data++;
             if (newsList == null) {
                 return false;
             } else if (newsList.size() > 0) {
@@ -64,7 +62,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
         if (newsList==null || newsList.size()<1)
             return false;
         loadNewsStr = redditHot.loadMoreData(getLatestName());
-        newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+        newsList.addAll(jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr));
         if (newsList!=null && newsList.size()>0)
             return true;
         return false;
@@ -84,6 +82,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     public Iterator createIterator() {
         return retrieveNews().iterator();
     }
+
     public int getIteratorSize(){
         Iterator myIterator = createIterator();
         int i = 0;
@@ -112,7 +111,8 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
             Fragment fragment1 = new headlinesFrag();
             FragmentManager manager1 = c.getFragmentManager();
             FragmentTransaction transaction1 = manager1.beginTransaction();
-            transaction1.add(R.id.LatestHeadlines_box, fragment1);
+            transaction1.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            transaction1.replace(R.id.LatestHeadlines_box, fragment1);
             transaction1.commitAllowingStateLoss();
         }
     }

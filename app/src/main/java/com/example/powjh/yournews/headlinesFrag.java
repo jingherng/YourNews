@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Canvas;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -20,6 +23,7 @@ public class headlinesFrag extends Fragment{
 
     String[] captions;
     String[] imageURL;
+    private static int OFFSET = 0;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
@@ -30,24 +34,35 @@ public class headlinesFrag extends Fragment{
 
         C = getContext();
 
-        String[] captions = new String[MainApp.headlines.getIteratorSize()];
-        String[] imageURL = new String[MainApp.headlines.getIteratorSize()];
+        final ArrayList<String> captions = new ArrayList<String>();
+        final ArrayList<String> imageURL = new ArrayList<String>();
 
         int i = 0;
         myIterator = MainApp.headlines.createIterator();
         while(myIterator.hasNext())
         {
             HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
+            captions.add(item.get("title"));
+            imageURL.add(item.get("imageurl"));
             i++;
         }
 
-        newsAdapter adapter = new newsAdapter(captions, imageURL);
+        final newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
+        final RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
-        newsRecycler.setAdapter(adapter);
+
+        // For endless Scrolling
+        scrollListener = new EndlessScrollListener(layoutManager){
+            @Override
+            public void onLoadMore(int page, int totalItemCounts, RecyclerView view){
+                MainApp.headlines.runMoreHeadLines();
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        newsRecycler.addOnScrollListener(scrollListener);
+
         adapter.setListener(new newsAdapter.Listener(){
             public void onClick(int position){
                 // Add article caption to watson DB
@@ -107,15 +122,7 @@ public class headlinesFrag extends Fragment{
             }
         });
 
-        // For endless Scrolling
-        scrollListener = new EndlessScrollListener(layoutManager){
-            @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler){
-                MainApp.headlines.runMoreHeadLines();
-            }
-        };
-
-        newsRecycler.addOnScrollListener(scrollListener);
+        newsRecycler.setAdapter(adapter);
 
         return newsRecycler;
     }

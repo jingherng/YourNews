@@ -13,6 +13,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -28,16 +30,16 @@ public class searchFrag extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         C = getContext();
-        String[] captions = new String[searchAPI.getIteratorSize()];
-        String[] imageURL = new String[searchAPI.getIteratorSize()];
+        ArrayList<String> captions = new ArrayList<String>();
+        ArrayList<String> imageURL = new ArrayList<String>();
 
         int i = 0;
         myIterator = searchAPI.createStaticIterator();
         while(myIterator.hasNext())
         {
             HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
+            captions.add(item.get("title"));
+            imageURL.add(item.get("imageurl"));
             i++;
         }
 
@@ -68,14 +70,14 @@ public class searchFrag extends Fragment{
             }
         });
 
-        // For endless Scrolling
+        /*// For endless Scrolling
         newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler) {
 
             }
             
-        });
+        });*/
 
 
         swipeController = new SwipeController(new SwipeControllerActions() {

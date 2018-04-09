@@ -59,7 +59,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
         if (newsList==null || newsList.size()<1)
             return false;
         loadNewsStr = latestNews.loadMoreData("");
-        newsList = jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr);
+        newsList.addAll(jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr));
         if (newsList!=null && newsList.size()>0)
             return true;
         return false;
@@ -92,4 +92,27 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
         return i;
     }
 
+    public void runMoreLatest(){
+        moreLatest more = new moreLatest();
+        more.execute();
+    }
+
+    class moreLatest extends AsyncTask<Void, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void...Void){
+            return moreNews();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean values){
+            c.findViewById(R.id.LatestNewsprogress).setVisibility(View.GONE);
+            Fragment bookmarksFrag = new latestNewsFrag();
+            FragmentManager manager = c.getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            transaction.replace(R.id.latestNewsFrag, bookmarksFrag);
+            transaction.commitAllowingStateLoss();
+        }
+    }
 }

@@ -42,6 +42,5 @@ public class RedditSearch implements NewsSite{
 	public String loadMoreData(String latestName) {
 		this.url = this.url+"&after="+latestName;
 		return webreq.makeWebServiceCall(this.url);
-	};
-	
+	}
 }

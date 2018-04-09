@@ -45,7 +45,7 @@ public class watson {
         if (this.input!=null)
             Log.d("Watson String input: ", this.input);
         else
-            Log.d("Watson String input: ", null);
+            Log.d("Watson String input: ", "null");
     }
 
     public ArrayList<String> getQueryKeyword(){
@@ -73,6 +73,7 @@ public class watson {
 
         List<KeywordsResult> keywordResults = response.getKeywords();
         for (KeywordsResult keyword : keywordResults) {
+            Log.d("Watson Keyword: ", keyword.getText().replaceAll("null","").replaceAll(" ","+"));
             resultList.add(keyword.getText().replaceAll("null","").replaceAll(" ","+"));
         }
         return resultList;

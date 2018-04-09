@@ -18,7 +18,7 @@ public class newsWebView extends Activity {
         WebView webView = (WebView) findViewById(R.id.newsWebView);
         int articleNo = (Integer)getIntent().getExtras().get(TAG);
         int i = 0;
-        for (HashMap<String, String> item: headlinesAPI.retrieveNews()){
+        for (HashMap<String, String> item: MainApp.headlines.retrieveNews()){
             if (i == articleNo)
                 webView.loadUrl(item.get("url"));
             i++;

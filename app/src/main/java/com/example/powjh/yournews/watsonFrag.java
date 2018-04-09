@@ -13,13 +13,15 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.*;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class watsonFrag extends Fragment{
 
-    String[] captions;
-    String[] imageURL;
+    ArrayList<String> captions;
+    ArrayList<String> imageURL;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
@@ -29,16 +31,16 @@ public class watsonFrag extends Fragment{
 
         C = getContext();
 
-        String[] captions = new String[mrWatson.getIteratorSize()];
-        String[] imageURL = new String[mrWatson.getIteratorSize()];
+        ArrayList<String> captions = new ArrayList<String>();
+        ArrayList<String> imageURL = new ArrayList<String>();
 
         int i = 0;
         myIterator = mrWatson.createStaticIterator();
         while(myIterator.hasNext())
         {
             HashMap<String,String> item = (HashMap<String, String>) (myIterator.next());
-            captions[i] = item.get("title");
-            imageURL[i] = item.get("imageurl");
+            captions.add(item.get("title"));
+            imageURL.add(item.get("imageurl"));
             i++;
         }
 

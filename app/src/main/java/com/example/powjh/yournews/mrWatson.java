@@ -43,6 +43,7 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
 
     public mrWatson(Activity c){
         this.c = c;
+
         
     }
     
@@ -59,7 +60,7 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
     @Override
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
-
+        watson = new facadeWatson();
         watsonNewsList = watson.getResults();
         return true;
     }

@@ -10,16 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 class newsAdapter extends RecyclerView.Adapter<newsAdapter.ViewHolder>{
-    public String[] captions;
-    public String[] imageURL;
+    public ArrayList<String> captions;
+    public ArrayList<String> imageURL;
     private Listener listener;
 
     public static interface Listener {
         public void onClick(int position);
     }
 
-    public newsAdapter(String[] captions, String[] imageURL){
+    public newsAdapter(ArrayList<String> captions, ArrayList<String> imageURL){
         this.captions = captions;
         this.imageURL = imageURL;
     }
@@ -44,15 +46,15 @@ class newsAdapter extends RecyclerView.Adapter<newsAdapter.ViewHolder>{
 
     @Override
     public int getItemCount(){
-        return captions.length;
+        return captions.size();
     }
 
     public void onBindViewHolder(ViewHolder holder, final int position){
         CardView cardView = holder.cardView;
         ImageView imageView = (ImageView) cardView.findViewById(R.id.news_image);
         TextView textView = (TextView) cardView.findViewById(R.id.new_captions);
-        textView.setText(captions[position]);
-        try{Picasso.get().load(imageURL[position]).resize(2048, 1600)
+        textView.setText(captions.get(position));
+        try{Picasso.get().load(imageURL.get(position)).resize(2048, 1600)
                 .onlyScaleDown().into(imageView);}catch (IllegalArgumentException e){
             Drawable drawable = cardView.getResources().getDrawable(R.drawable.imagenotfound);
             imageView.setImageDrawable(drawable);

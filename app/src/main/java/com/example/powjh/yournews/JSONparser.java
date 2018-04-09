@@ -24,8 +24,6 @@ public class JSONparser {
 	private JSONparser() {
 	}
 
-	;
-
 	public static JSONparser getInstance() {
 		if (jsonManager == null) {
 			if (firstThread) {

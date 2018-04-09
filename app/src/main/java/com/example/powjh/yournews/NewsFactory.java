@@ -12,7 +12,6 @@ public class NewsFactory {
 		else if (typeOfNewsSite.equals("latest")) {
 			return new NewsAPILatest(newsSources);
 		}
-
 		return null;
 	}
 }
