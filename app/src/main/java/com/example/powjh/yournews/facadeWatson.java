@@ -23,16 +23,24 @@ public class facadeWatson {
     
     public ArrayList<HashMap<String,String>> getResults() {
 		ArrayList<String> resultList = watson.getQueryKeyword();
-        
-        for (String result : resultList) {
+        if (resultList.size()==0){
             String loadNewsStr;
-            redditSearch = newsFactory.makeNewsSite("search","",result);
+            redditSearch = newsFactory.makeNewsSite("hot", headlinesAPI.newsSources, "");
             loadNewsStr = redditSearch.loadInitialData();
             tempWatsonNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
             watsonFinalList.addAll(tempWatsonNewsList);
+            watsonNewsList.addAll(watsonFinalList);
         }
-
-        watsonNewsList.addAll(watsonFinalList);
+        else {
+            for (String result : resultList) {
+                String loadNewsStr;
+                redditSearch = newsFactory.makeNewsSite("search", "", result);
+                loadNewsStr = redditSearch.loadInitialData();
+                tempWatsonNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+                watsonFinalList.addAll(tempWatsonNewsList);
+            }
+            watsonNewsList.addAll(watsonFinalList);
+        }
         return watsonNewsList;
 	}
 }

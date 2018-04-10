@@ -111,23 +111,7 @@ public class AccountRec extends Activity {
         }
     }
 
-    public void callHomePage(View view){
-
-        // If-statement to check whether any toggle has been activated and to update DB if true
-        if (bool.containsKey("BBC")|bool.containsKey("RT")|bool.containsKey("CNN")|
-        bool.containsKey("WSJ")|bool.containsKey("NYT")|bool.containsKey("Sky")|bool.containsKey("CBS")
-        |bool.containsKey("CBS")|bool.containsKey("BR")|bool.containsKey("ESPN")|
-                bool.containsKey("NBC")) {
-            try {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.update("USER_INFO", bool, "_id = ? ", new String[]{Integer.toString(1)});
-
-            } catch (SQLException e) {
-                Toast toast = Toast.makeText(this, "Database not modified", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }
-
+    public void setString(){
         // String builder for newsSourcesURL
         try{
             StringBuilder stringBuilder = new StringBuilder();
@@ -231,12 +215,33 @@ public class AccountRec extends Activity {
             headlinesAPI.newsSources = finalString;
             latestNewsAPI.newsSources = finalString;
             searchAPI.newsSources = finalString;
-            
+
 
         }catch(SQLException e){
             Toast toast = Toast.makeText(this, "Sources not updated", Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    public void callHomePage(View view){
+
+        // If-statement to check whether any toggle has been activated and to update DB if true
+        if (bool.containsKey("BBC")|bool.containsKey("RT")|bool.containsKey("CNN")|
+        bool.containsKey("WSJ")|bool.containsKey("NYT")|bool.containsKey("Sky")|bool.containsKey("CBS")
+        |bool.containsKey("CBS")|bool.containsKey("BR")|bool.containsKey("ESPN")|
+                bool.containsKey("NBC")) {
+            try {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.update("USER_INFO", bool, "_id = ? ", new String[]{Integer.toString(1)});
+
+            } catch (SQLException e) {
+                Toast toast = Toast.makeText(this, "Database not modified", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+        setString();
+        MainApp.headlines = new headlinesAPI(MainApp.headlines.getActivity());
+        MainApp.headlines.execute();
 
         // Update public static final string newsSources in the format: bloomberg|bbc
 

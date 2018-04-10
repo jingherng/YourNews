@@ -51,7 +51,7 @@ public class watson {
     public ArrayList<String> getQueryKeyword(){
 
         ArrayList<String> resultList = new ArrayList<String>();
-
+        try{
         KeywordsOptions keywordsOptions = new KeywordsOptions.Builder()
                 .emotion(false)
                 .sentiment(false)
@@ -76,6 +76,10 @@ public class watson {
             Log.d("Watson Keyword: ", keyword.getText().replaceAll("null","").replaceAll(" ","+"));
             resultList.add(keyword.getText().replaceAll("null","").replaceAll(" ","+"));
         }
-        return resultList;
+    }
+    catch(Exception e){
+        //Does not append anything to resultList
+    }
+    return resultList;
     }
 }

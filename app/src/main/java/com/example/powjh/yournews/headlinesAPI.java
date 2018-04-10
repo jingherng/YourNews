@@ -26,12 +26,19 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     String loadNewsStr;
     private NewsSite redditHot;
     private JSONparser jsonManager;
+    headlinesFrag fragment1;
+    FragmentManager manager1;
+    FragmentTransaction transaction1;
 
     Activity c;
     public static String newsSources = "";
 
     public static ArrayList<HashMap<String,String>> retrieveNews(){
         return newsList;
+    }
+
+    public Activity getActivity(){
+        return this.c;
     }
 
     public headlinesAPI(Activity c){
@@ -44,6 +51,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     protected Boolean doInBackground(Void... Void) {
         // Creating service handler class instance
             loadNewsStr = redditHot.loadInitialData();
+            Log.d("Problem here",loadNewsStr);
             newsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
             if (newsList == null) {
                 return false;
@@ -54,8 +62,8 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     }
  
     private String getLatestName() {
-    	HashMap<String, String> item = newsList.get(newsList.size()-1);
-    	return item.get("name");
+        HashMap<String, String> item = newsList.get(newsList.size() - 1);
+        return item.get("name");
     }
 
     public Boolean moreNews(){
@@ -71,10 +79,10 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     @Override
     protected void onPostExecute(Boolean values){
         c.findViewById(R.id.progress).setVisibility(View.GONE);
-        Fragment fragment1 = new headlinesFrag();
-        FragmentManager manager1 = c.getFragmentManager();
-        FragmentTransaction transaction1 = manager1.beginTransaction();
-        transaction1.add(R.id.LatestHeadlines_box, fragment1);
+        fragment1 = new headlinesFrag();
+        manager1 = c.getFragmentManager();
+        transaction1 = manager1.beginTransaction();
+        transaction1.replace(R.id.LatestHeadlines_box, fragment1);
         transaction1.commitAllowingStateLoss();
     }
 
@@ -101,19 +109,18 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     class moreHeadlines extends AsyncTask<Void, Integer, Boolean>{
 
         @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
         protected Boolean doInBackground(Void...Void){
             return moreNews();
         }
 
         @Override
         protected void onPostExecute(Boolean values){
-            c.findViewById(R.id.progress).setVisibility(View.GONE);
-            Fragment fragment1 = new headlinesFrag();
-            FragmentManager manager1 = c.getFragmentManager();
-            FragmentTransaction transaction1 = manager1.beginTransaction();
-            transaction1.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            transaction1.replace(R.id.LatestHeadlines_box, fragment1);
-            transaction1.commitAllowingStateLoss();
+            fragment1.refresh();
         }
     }
 }

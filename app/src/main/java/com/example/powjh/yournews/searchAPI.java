@@ -35,7 +35,7 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
     private NewsFactory newsFactory;
 
     Activity c;
-
+    searchFrag searchFrag;
     private String userQuery;
     private NewsSite redditSearch;
     private JSONparser jsonManager;
@@ -93,7 +93,7 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
         if (searchNewsList==null || searchNewsList.size()<1)
             return false;
         loadNewsStr = redditSearch.loadMoreData(getLatestName());
-        searchNewsList = jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr);
+        searchNewsList.addAll(jsonManager.parseJSON(JSONparser.REDDIT, loadNewsStr));
         if (searchNewsList!=null && searchNewsList.size()>0)
             return true;
         return false;
@@ -104,10 +104,10 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
         if(true) {
             c.findViewById(R.id.notFound).setVisibility(View.GONE);
             c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
-            Fragment fragment1 = new searchFrag();
+            searchFrag = new searchFrag();
             FragmentManager manager1 = c.getFragmentManager();
             FragmentTransaction transaction1 = manager1.beginTransaction();
-            transaction1.replace(R.id.SearchResults, fragment1);
+            transaction1.replace(R.id.SearchResults, searchFrag);
             transaction1.addToBackStack(null);
             transaction1.commitAllowingStateLoss();
         }
@@ -139,5 +139,29 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
             myIterator.next();
         }
         return i;
+    }
+
+
+    public void runMoreLatest(){
+        moreLatest more = new moreLatest();
+        more.execute();
+    }
+
+    class moreLatest extends AsyncTask<Void, Integer, Boolean> {
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void...Void){
+            return moreNews();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean values){
+            searchFrag.refresh();
+        }
     }
 }

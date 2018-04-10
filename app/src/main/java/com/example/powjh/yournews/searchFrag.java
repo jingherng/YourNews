@@ -1,12 +1,14 @@
 package com.example.powjh.yournews;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -20,11 +22,18 @@ import java.util.Iterator;
 
 public class searchFrag extends Fragment{
 
-    String[] captions;
-    String[] imageURL;
     private Iterator myIterator;
     private Context C;
     private static SwipeController swipeController;
+
+    public void refresh(){
+        try{
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();}
+        catch (Exception e){
+            refresh();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +52,7 @@ public class searchFrag extends Fragment{
             i++;
         }
 
-        newsAdapter adapter = new newsAdapter(captions, imageURL);
+        final newsAdapter adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
@@ -70,15 +79,14 @@ public class searchFrag extends Fragment{
             }
         });
 
-        /*// For endless Scrolling
+        // For endless Scrolling
         newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler) {
-
+                MainApp.searchAPI.runMoreLatest();
+                adapter.notifyDataSetChanged();
             }
-            
-        });*/
-
+        });
 
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override

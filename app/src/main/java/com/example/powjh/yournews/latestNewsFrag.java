@@ -1,6 +1,7 @@
 package com.example.powjh.yournews;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +22,18 @@ import java.util.Iterator;
 
 public class latestNewsFrag extends Fragment{
 
-    ArrayList<String> captions;
-    ArrayList<String> imageURL;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
+
+    public void refresh(){
+        try{
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();}
+        catch (Exception e){
+            refresh();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

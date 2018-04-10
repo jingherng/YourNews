@@ -43,8 +43,6 @@ class mrWatson extends AsyncTask<Void, Void, Boolean> implements NewsIterator{
 
     public mrWatson(Activity c){
         this.c = c;
-
-        
     }
     
     private String getLatestName() {

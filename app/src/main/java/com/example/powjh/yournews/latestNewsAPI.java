@@ -26,6 +26,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     private JSONparser jsonManager;
     String loadNewsStr;
     NewsSite latestNews;
+    latestNewsFrag latestNewsFrag;
 
     Activity c;
     public static String newsSources = "";
@@ -59,7 +60,12 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
         if (newsList==null || newsList.size()<1)
             return false;
         loadNewsStr = latestNews.loadMoreData("");
-        newsList.addAll(jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr));
+        ArrayList<HashMap<String,String>> tempList = jsonManager.parseJSON(JSONparser.NEWSAPI, loadNewsStr);
+        if (tempList!=null)
+            newsList.addAll(tempList);
+        else{
+            Log.d("No more values","");
+        }
         if (newsList!=null && newsList.size()>0)
             return true;
         return false;
@@ -67,11 +73,11 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     
     @Override
     protected void onPostExecute(Boolean values){
-        c.findViewById(R.id.LatestNewsprogress).setVisibility(View.GONE);
-        Fragment bookmarksFrag = new latestNewsFrag();
+        c.findViewById(R.id.LatestNewsprogressTop).setVisibility(View.GONE);
+        latestNewsFrag = new latestNewsFrag();
         FragmentManager manager = c.getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.latestNewsFrag, bookmarksFrag);
+        transaction.add(R.id.latestNewsFrag, latestNewsFrag);
         transaction.commitAllowingStateLoss();
     }
 
@@ -100,19 +106,18 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
     class moreLatest extends AsyncTask<Void, Integer, Boolean>{
 
         @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
         protected Boolean doInBackground(Void...Void){
             return moreNews();
         }
 
         @Override
         protected void onPostExecute(Boolean values){
-            c.findViewById(R.id.LatestNewsprogress).setVisibility(View.GONE);
-            Fragment bookmarksFrag = new latestNewsFrag();
-            FragmentManager manager = c.getFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            transaction.replace(R.id.latestNewsFrag, bookmarksFrag);
-            transaction.commitAllowingStateLoss();
+            latestNewsFrag.refresh();
         }
     }
 }

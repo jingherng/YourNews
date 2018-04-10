@@ -57,18 +57,21 @@ public class Login extends Activity {
             Intent homeIntent = new Intent(Login.this, MainApp.class);
             startActivity(homeIntent);
         }
-        else{
-            CharSequence error = "Wrong Username/Password";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(this, error, duration);
-            toast.show();
-        }
+        else
+            showToast();
     }
 
     public void returnBack(View v){
         Fragment fragment = getFragmentManager().findFragmentById(R.id.placeHolder);
         if(fragment != null)
             getFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
+    private void showToast(){
+        CharSequence error = "Wrong Username/Password";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(this, error, duration);
+        toast.show();
     }
 }

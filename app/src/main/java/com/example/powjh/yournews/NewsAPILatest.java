@@ -49,6 +49,7 @@ public class NewsAPILatest implements NewsSite{
 	public String loadMoreData(String pageHolder) {
 		this.url = "https://newsapi.org/v2/top-headlines?page="+ page + "&language=en&apiKey=f0da13ca99f44e9b9cc4d6ff7b4d4924&sources="+this.newsSources;
 		page++;
+		Log.d("Latest url:",this.url);
 		return webreq.makeWebServiceCall(this.url);
 	};
 	

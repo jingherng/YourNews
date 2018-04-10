@@ -7,5 +7,3 @@ Implementation:
 3. News Sources
 4. Sign up button (Password have 1 alphanumeric, numeric & length 8-16 characters)
 5. Link to Telegram bot on login activity
-6. Home function
-7. Design principles

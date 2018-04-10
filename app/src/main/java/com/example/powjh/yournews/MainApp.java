@@ -27,6 +27,7 @@ public class MainApp extends Activity {
     private ListView menuList;
     private DrawerLayout drawerLayout;
     public static headlinesAPI headlines;
+    public static searchAPI searchAPI;
     public static watsonDB watsonDB;
     public static UserInfoDB userDB;
     public static BookmarksDB bmDB;
@@ -62,12 +63,12 @@ public class MainApp extends Activity {
         notfound.setVisibility(View.GONE);
 
         // Sets Search view
-        SearchView search = findViewById(R.id.Search);
+        final SearchView search = findViewById(R.id.Search);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                searchAPI searchAPI = new searchAPI(MainApp.this);
+                searchAPI = new searchAPI(MainApp.this);
                 searchAPI.setQuery(s);
                 searchAPI.execute();
                 LinearLayout searchResults = findViewById(R.id.SearchResults);

@@ -1,5 +1,7 @@
 package com.example.powjh.yournews;
 
+import android.util.Log;
+
 public class RedditHot implements NewsSite{
 	
 	public String url;
@@ -16,12 +18,13 @@ public class RedditHot implements NewsSite{
 		        }
 		        else
 		        {
-		        	this.url = "https://www.reddit.com/r/worldnews/search?q=url%3A"+this.newsSources+"&restrict_sr=on&sort=hot&t=all&limit=5";
-		        }	
+		        	this.url = "https://www.reddit.com/r/worldnews/search.json?q=url%3A"+this.newsSources+"&restrict_sr=on&limit=5&sort=hot";
+		        }
+		Log.d("Reddit Hot",this.url);
 	}
 	
 	private String formatString() {
-		String newsSourceurl = newsSources.replaceAll("|","+OR+");
+		String newsSourceurl = newsSources.replaceAll("\\|","+OR+");
 		return newsSourceurl;
 	}
 

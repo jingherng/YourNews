@@ -55,6 +55,7 @@ public class JSONparser {
 						// Get the Array from "children" key
 						JSONArray newsItem = newsData.getJSONArray("children");
 						ArrayList <String> urls = new ArrayList<String>();
+						ArrayList <String> urlsImage = new ArrayList<String>();
 
 						for (int i = 0; i < numObject; i++) {
 							JSONObject oneNewsItem = (newsItem.getJSONObject(i)).getJSONObject("data");
@@ -74,7 +75,7 @@ public class JSONparser {
 									pictureLink = picture.attr("content");
 									break;
 								}
-								if (urls.contains(url)){}
+								if (urls.contains(url) || urlsImage.contains(pictureLink)){}
 								else{
 								HashMap<String, String> newsdict = new HashMap<String, String>();
 
@@ -83,7 +84,8 @@ public class JSONparser {
 								newsdict.put("url", url);
 								newsdict.put("imageurl", pictureLink);
 								newsdict.put("name", name);
-	                        	urls.add(title);
+	                        	urls.add(url);
+	                        	urlsImage.add(pictureLink);
 	                        	redditNewsList.add(newsdict);
 								}
 							} catch (JSONException | IOException e) {
@@ -107,19 +109,20 @@ public class JSONparser {
 					try {
 						//Hashmap for latest news articles
 						ArrayList<HashMap<String, String>> newsAPINewsList = new ArrayList<HashMap<String, String>>();
-						ArrayList<String> titles = new ArrayList<String>();
+						ArrayList<String> urls = new ArrayList<String>();
+						ArrayList<String> urlImages = new ArrayList<String>();
 						JSONObject jsonObj = new JSONObject(json);
 
 						// Getting JSON object from key "data"
 						JSONArray newsItem = jsonObj.getJSONArray("articles");
 
-						// Testing 5 objects runtime
-						int numObject = 5;
-						if (newsItem == null || newsItem.length() < 5) {
+						// Testing 25 objects runtime
+						int numObject = 10;
+						if (newsItem == null || newsItem.length() < 10) {
 							return null;
 						}
 
-						for (int i = 0; i < 5; i++) {
+						for (int i = 0; i < 10; i++) {
 							JSONObject oneNewsItem = newsItem.getJSONObject(i);
 
 							//Getting the title
@@ -127,11 +130,9 @@ public class JSONparser {
 							//Getting the url
 							String url = oneNewsItem.getString("url");
 							String pictureLink = oneNewsItem.getString("urlToImage");
-							String descriptionLink = oneNewsItem.getString("description");
-							String timeLink = oneNewsItem.getString("publishedAt").substring(0, 10);
 
 
-							if (titles.contains(url)) {
+							if (urls.contains(url)||urlImages.contains(pictureLink)) {
 							} else {
 								HashMap<String, String> latestnewsdict = new HashMap<String, String>();
 
@@ -139,9 +140,8 @@ public class JSONparser {
 								latestnewsdict.put("title", title);
 								latestnewsdict.put("url", url);
 								latestnewsdict.put("imageurl", pictureLink);
-								latestnewsdict.put("description", descriptionLink);
-								latestnewsdict.put("time", timeLink);
-								titles.add(url);
+								urls.add(url);
+								urlImages.add(pictureLink);
 								newsAPINewsList.add(latestnewsdict);
 							}
 

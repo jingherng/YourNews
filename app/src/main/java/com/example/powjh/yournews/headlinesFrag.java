@@ -1,6 +1,7 @@
 package com.example.powjh.yournews;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -21,13 +22,21 @@ import java.util.Iterator;
 
 public class headlinesFrag extends Fragment{
 
-    String[] captions;
-    String[] imageURL;
     private static int OFFSET = 0;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
     private EndlessScrollListener scrollListener;
+    private newsAdapter adapter;
+
+    public void refresh(){
+        try{
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();}
+        catch (Exception e){
+            refresh();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -47,7 +56,7 @@ public class headlinesFrag extends Fragment{
             i++;
         }
 
-        final newsAdapter adapter = new newsAdapter(captions, imageURL);
+        adapter = new newsAdapter(captions, imageURL);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         RecyclerView newsRecycler = (RecyclerView) inflater.inflate(R.layout.recyclerview, container, false);
         newsRecycler.setLayoutManager(layoutManager);
@@ -124,7 +133,6 @@ public class headlinesFrag extends Fragment{
         });
 
         newsRecycler.setAdapter(adapter);
-
         return newsRecycler;
     }
 }
