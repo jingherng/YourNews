@@ -242,9 +242,6 @@ public class AccountRec extends Activity {
         setString();
         MainApp.headlines = new headlinesAPI(MainApp.headlines.getActivity());
         MainApp.headlines.execute();
-
-        // Update public static final string newsSources in the format: bloomberg|bbc
-
         finish();
     }
 

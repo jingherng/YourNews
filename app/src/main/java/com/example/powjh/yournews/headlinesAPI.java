@@ -79,11 +79,19 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
     @Override
     protected void onPostExecute(Boolean values){
         c.findViewById(R.id.progress).setVisibility(View.GONE);
+        c.findViewById(R.id.LatestHeadlines_box).setVisibility(View.VISIBLE);
         fragment1 = new headlinesFrag();
         manager1 = c.getFragmentManager();
         transaction1 = manager1.beginTransaction();
         transaction1.replace(R.id.LatestHeadlines_box, fragment1);
         transaction1.commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onPreExecute(){
+        super.onPreExecute();
+        c.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        c.findViewById(R.id.progress).bringToFront();
     }
 
 	@Override

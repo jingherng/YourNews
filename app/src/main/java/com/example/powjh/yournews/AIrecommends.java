@@ -70,4 +70,10 @@ public class AIrecommends extends Activity {
         mrWatson mrWatson = new mrWatson(AIrecommends.this);
         mrWatson.execute();
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
+    }
 }
