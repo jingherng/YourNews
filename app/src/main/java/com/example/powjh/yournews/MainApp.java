@@ -74,7 +74,7 @@ public class MainApp extends Activity {
                 LinearLayout searchResults = findViewById(R.id.SearchResults);
                 searchResults.setVisibility(View.VISIBLE);
                 LinearLayout rest = findViewById(R.id.rest);
-                rest.setVisibility(View.INVISIBLE);
+                rest.setVisibility(View.GONE);
 
                 // Adds keywords of searches to database
                 ContentValues keywords = new ContentValues();

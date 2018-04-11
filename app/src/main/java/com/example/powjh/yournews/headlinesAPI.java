@@ -110,7 +110,8 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
 
         @Override
         protected void onPreExecute(){
-            super.onPreExecute();
+            c.findViewById(R.id.BottomheadProgress).setVisibility(View.VISIBLE);
+            c.findViewById(R.id.BottomheadProgress).bringToFront();
         }
 
         @Override
@@ -120,6 +121,7 @@ class headlinesAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIter
 
         @Override
         protected void onPostExecute(Boolean values){
+            c.findViewById(R.id.BottomheadProgress).setVisibility(View.GONE);
             fragment1.refresh();
         }
     }

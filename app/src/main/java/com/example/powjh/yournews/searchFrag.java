@@ -82,7 +82,7 @@ public class searchFrag extends Fragment{
         // For endless Scrolling
         newsRecycler.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemCounts, RecyclerView newsRecycler) {
+            public void onLoadMore(int page, int totalItemCounts, RecyclerView view) {
                 MainApp.searchAPI.runMoreLatest();
                 adapter.notifyDataSetChanged();
             }

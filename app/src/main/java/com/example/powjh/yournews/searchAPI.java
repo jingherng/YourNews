@@ -101,7 +101,7 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
 
     @Override
     protected void onPostExecute(Boolean values){
-        if(true) {
+        if(searchNewsList.size() != 0) {
             c.findViewById(R.id.notFound).setVisibility(View.GONE);
             c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
             searchFrag = new searchFrag();
@@ -112,8 +112,8 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
             transaction1.commitAllowingStateLoss();
         }
         else {
-            c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
             c.findViewById(R.id.searchProgress).setVisibility(View.GONE);
+            c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
             c.findViewById(R.id.notFound).setVisibility(View.VISIBLE);
         }
     }
@@ -121,8 +121,9 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
     @Override
     protected void onPreExecute(){
         c.findViewById(R.id.searchProgress).setVisibility(View.VISIBLE);
+        c.findViewById(R.id.BottomSearchProgress).setVisibility(View.GONE);
         c.findViewById(R.id.notFound).setVisibility(View.GONE);
-        c.findViewById(R.id.SearchResultsFrag).setVisibility(View.GONE);
+        c.findViewById(R.id.SearchResultsFrag).setVisibility(View.INVISIBLE);
     }
 
 	public Iterator createIterator() {
@@ -152,6 +153,8 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            c.findViewById(R.id.BottomSearchProgress).setVisibility(View.VISIBLE);
+            c.findViewById(R.id.BottomSearchProgress).bringToFront();
         }
 
         @Override
@@ -161,7 +164,9 @@ class searchAPI extends AsyncTask<Boolean, Void, Boolean> implements NewsIterato
 
         @Override
         protected void onPostExecute(Boolean values){
-            searchFrag.refresh();
+            c.findViewById(R.id.BottomSearchProgress).setVisibility(View.GONE);
+            if (searchNewsList.size()!=0)
+                searchFrag.refresh();
         }
     }
 }

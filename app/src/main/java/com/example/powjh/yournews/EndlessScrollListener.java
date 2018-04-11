@@ -18,6 +18,9 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 0;
+    int firstVisibleItem, visibleItemCount, totalItemCount, lastVisibleItem;
+    private int previousTotal = 0;
+
 
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -53,11 +56,6 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     // but first we check if we are waiting for the previous load to finish.
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
-        if(dy < 0) //check for scroll down
-        {
-            return;
-        }
-
         int lastVisibleItemPosition = 0;
         int totalItemCount = mLayoutManager.getItemCount();
 
@@ -73,7 +71,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
 
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
-        if (totalItemCount < previousTotalItemCount) {
+        if (dy>0 && totalItemCount < previousTotalItemCount) {
             this.currentPage = this.startingPageIndex;
             this.previousTotalItemCount = totalItemCount;
             if (totalItemCount == 0) {
@@ -83,7 +81,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
         // If it’s still loading, we check to see if the dataset count has
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
-        if (loading && (totalItemCount > previousTotalItemCount)) {
+        if (dy>0 && loading && (totalItemCount > previousTotalItemCount)) {
             loading = false;
             previousTotalItemCount = totalItemCount;
         }
@@ -92,12 +90,13 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
-        if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+        if (dy>0 && !loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
             currentPage++;
             onLoadMore(currentPage, totalItemCount, view);
             loading = true;
         }
     }
+
 
     // Call this method whenever performing new searches
     public void resetState() {

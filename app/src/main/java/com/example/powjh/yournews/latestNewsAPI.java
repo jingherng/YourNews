@@ -108,6 +108,8 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            c.findViewById(R.id.BottomLatestProgress).setVisibility(View.VISIBLE);
+            c.findViewById(R.id.BottomLatestProgress).bringToFront();
         }
 
         @Override
@@ -117,6 +119,7 @@ class latestNewsAPI extends AsyncTask<Void, Integer, Boolean> implements NewsIte
 
         @Override
         protected void onPostExecute(Boolean values){
+            c.findViewById(R.id.BottomLatestProgress).setVisibility(View.GONE);
             latestNewsFrag.refresh();
         }
     }

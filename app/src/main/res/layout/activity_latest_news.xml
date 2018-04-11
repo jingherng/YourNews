@@ -35,6 +35,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <ProgressBar
+            android:id="@+id/BottomLatestProgress"
+            android:layout_gravity="bottom"
+            android:forceHasOverlappingRendering="true"
+            android:visibility="gone"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
     </LinearLayout>
 
     <!-- For sliding drawer-->

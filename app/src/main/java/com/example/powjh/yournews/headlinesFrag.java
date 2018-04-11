@@ -22,7 +22,6 @@ import java.util.Iterator;
 
 public class headlinesFrag extends Fragment{
 
-    private static int OFFSET = 0;
     private Context C;
     private static SwipeController swipeController;
     private Iterator myIterator;
