@@ -64,7 +64,7 @@ public class Login extends Activity {
             Intent homeIntent = new Intent(Login.this, MainApp.class);
             startActivity(homeIntent);
         }
-        else if (UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","USERNAME",username.getText().toString())||
+        else if (UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","USERNAME",username.getText().toString())&&
                 UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","PASSWORD",password.getText().toString())){
             Intent homeIntent = new Intent(Login.this, MainApp.class);
             startActivity(homeIntent);
