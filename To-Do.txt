@@ -1,9 +1,7 @@
 Bugs:
-1. No results found not appearing
+1. 
 
 Implementation:
 1. Unbookmark
-2. Endless scroll
-3. News Sources
-4. Sign up button (Password have 1 alphanumeric, numeric & length 8-16 characters)
-5. Link to Telegram bot on login activity
+2. Help
+3. Sign up button (Password have 1 alphanumeric, numeric & length 8-16 characters)

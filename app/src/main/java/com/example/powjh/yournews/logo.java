@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class logo extends Fragment {
+public class logo extends Fragment implements View.OnClickListener {
     public logo() {
         // Required empty public constructor
     }
@@ -20,7 +20,15 @@ public class logo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_logo, container, false);
+        View v = inflater.inflate(R.layout.fragment_logo, container, false);
+        RelativeLayout r = v.findViewById(R.id.logo);
+        r.setOnClickListener(this);
+        return v;
+    }
+
+    @Override
+    public void onClick(View v){
+        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
     }
 
 }

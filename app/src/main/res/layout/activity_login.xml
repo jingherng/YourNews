@@ -6,8 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.powjh.yournews.Login"
-    android:onClick="returnBack">
+    tools:context="com.example.powjh.yournews.Login">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -76,8 +75,20 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/SignUp"
+        android:onClick="SignUp"
         app:layout_constraintLeft_toRightOf="@id/loginButton"
         app:layout_constraintTop_toBottomOf="@id/password"
         android:stateListAnimator="@null"/>
+
+    <ImageButton
+        android:onClick="loginHelp"
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@android:drawable/ic_menu_help"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 </android.support.constraint.ConstraintLayout>

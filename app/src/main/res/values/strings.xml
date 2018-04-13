@@ -25,6 +25,7 @@
         <item>Latest News</item>
         <item>Recommendations</item>
         <item>Bookmarks</item>
+        <item>Help</item>
     </string-array>
     <string name="weather">Weather Today</string>
     <string name="LatestHeadlines">Latest Headlines</string>
@@ -38,8 +39,32 @@
     <string name="latestNews">Latest News</string>
     <string name="title_activity_main_app">MainApp</string>
     <string name="notFound">No results found</string>
+    <string name="HelpTitle">Help</string>
+    <string name="about">About this App</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aboutBody">
+        YourNews is a news application that curates news articles specially for
+        you, the user.\n\nOur Artificial Intelligence API is based on your clicks and
+        searches.\n\nOur AI API recommends you news articles uniquely picked from
+        the billions of news articles on the Internet because it
+        knows that you are interested in those topics.
+    </string>
+
+    <string name="howtouseHead">
+        How to Use
+    </string>
+
+    <string name="howtouseBody">
+        Step 1: Register an account with YourNews so that we can record your searches and clicks.\n\nStep 2: Use the app as you would like any other news application.\n\nStep 3: Click on Recommendations in the menu to get recommended news articles.
+    </string>
+
+    <string name="howtouseEnd">
+        \n\nAnd it is that easy to get recommended articles by our AI API.
+    </string>
     <string name="title_activity_airecommends">AIrecommends</string>
+
+    <string name="loginHelpHead">Default Account</string>
+
+    <string name="loginHelpBody">Username:\t\tadmin\nPassword:\t\tadmin</string>
+
 </resources>

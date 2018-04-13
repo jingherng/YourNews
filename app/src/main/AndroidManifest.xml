@@ -31,8 +31,9 @@
         <activity android:name=".latestNewsWebView" />
         <activity
             android:name=".AIrecommends"
-            android:label="@string/title_activity_airecommends"></activity>
-        <activity android:name=".watsonWebView"/>
+            android:label="@string/title_activity_airecommends" />
+        <activity android:name=".watsonWebView" />
+        <activity android:name=".help"></activity>
     </application>
 
 </manifest>

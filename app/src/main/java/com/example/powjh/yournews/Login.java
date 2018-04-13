@@ -3,7 +3,12 @@ package com.example.powjh.yournews;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +20,7 @@ public class Login extends Activity {
 
     private EditText username, password;
     private Intent homeIntent;
+    private UserDB UserDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,7 @@ public class Login extends Activity {
         setContentView(R.layout.activity_login);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        UserDB = new UserDB(this);
 
         // Begin the transaction
         Fragment logo = new logo();
@@ -57,14 +64,13 @@ public class Login extends Activity {
             Intent homeIntent = new Intent(Login.this, MainApp.class);
             startActivity(homeIntent);
         }
+        else if (UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","USERNAME",username.getText().toString())||
+                UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","PASSWORD",password.getText().toString())){
+            Intent homeIntent = new Intent(Login.this, MainApp.class);
+            startActivity(homeIntent);
+        }
         else
             showToast();
-    }
-
-    public void returnBack(View v){
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.placeHolder);
-        if(fragment != null)
-            getFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     private void showToast(){
@@ -73,5 +79,32 @@ public class Login extends Activity {
 
         Toast toast = Toast.makeText(this, error, duration);
         toast.show();
+    }
+
+    public void loginHelp(View v){
+        Toast t = Toast.makeText(this,"Username: admin\nPassword: admin", Toast.LENGTH_LONG);
+        t.show();
+    }
+
+    public void SignUp(View v){
+        if (username.getText().toString().equals("") || password.getText().toString().equals("")){
+            Toast toast = Toast.makeText(this, "Please insert a Username/Password", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else {
+
+            if (!UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","USERNAME",username.getText().toString())||
+                    !UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","PASSWORD",password.getText().toString())) {
+                ContentValues newAcc = new ContentValues();
+                newAcc.put("USERNAME", username.getText().toString());
+                newAcc.put("PASSWORD", password.getText().toString());
+                SQLiteOpenHelper dbHelper = new UserDB(this);
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.insert("USER_DB", null, newAcc);
+                db.close();
+                Toast toast = Toast.makeText(this, "Account Created\nLogin again", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
     }
 }

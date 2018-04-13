@@ -62,6 +62,11 @@ public class AIrecommends extends Activity {
                     Intent bmIntent = new Intent(AIrecommends.this, Bookmarks.class);
                     startActivity(bmIntent);
                     break;
+                case 4:
+                    // Help
+                    Intent help = new Intent(AIrecommends.this, help.class);
+                    startActivity(help);
+                    break;
             }
         }
     }

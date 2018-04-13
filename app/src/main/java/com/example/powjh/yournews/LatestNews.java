@@ -62,6 +62,11 @@ public class LatestNews extends Activity {
                     Intent bmIntent = new Intent(LatestNews.this, Bookmarks.class);
                     startActivity(bmIntent);
                     break;
+                case 4:
+                    // Help
+                    Intent help = new Intent(LatestNews.this, help.class);
+                    startActivity(help);
+                    break;
             }
         }
     }

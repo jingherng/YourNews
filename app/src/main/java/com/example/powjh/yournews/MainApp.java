@@ -126,6 +126,11 @@ public class MainApp extends Activity {
                     Intent bmIntent = new Intent(MainApp.this, Bookmarks.class);
                     startActivity(bmIntent);
                     break;
+                case 4:
+                    // Help
+                    Intent help = new Intent(MainApp.this, help.class);
+                    startActivity(help);
+                    break;
             }
         }
     }

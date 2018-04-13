@@ -64,6 +64,11 @@ public class Bookmarks extends Activity {
                     // Bookmarks
                     //drawerLayout.closeDrawers();
                     break;
+                case 4:
+                    // Help
+                    Intent help = new Intent(Bookmarks.this, help.class);
+                    startActivity(help);
+                    break;
             }
         }
     }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.powjh.yournews.help"
+    android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/imageView"
+                    android:layout_width="200dp"
+                    android:layout_height="220dp"
+                    android:src="@drawable/logo" />
+
+                <TextView
+                    android:paddingTop="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:textSize="32sp"
+                    android:id="@+id/about"
+                    android:text="@string/about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/aboutBody"
+                    android:id="@+id/aboutBody"
+                    android:textSize="18sp"
+                    android:lineSpacingMultiplier="0.8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="32sp"
+                    android:id="@+id/howtouseHead"
+                    android:textStyle="bold"
+                    android:text="@string/howtouseHead"
+                    android:paddingTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/howtouseBody"
+                    android:paddingRight="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="8dp"
+                    android:textSize="18sp"
+                    android:lineSpacingMultiplier="0.8"
+                    android:text="@string/howtouseBody"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/howtouseEnd"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textSize="18sp"
+                    android:lineSpacingMultiplier="0.8"
+                    android:text="@string/howtouseEnd"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+</ScrollView>
