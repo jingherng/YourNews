@@ -82,7 +82,7 @@ public class Login extends Activity {
     }
 
     public void loginHelp(View v){
-        Toast t = Toast.makeText(this,"Username: admin\nPassword: admin", Toast.LENGTH_LONG);
+        Toast t = Toast.makeText(this,"Click on Sign Up if you don't have an account\nClick on Login if you have an account", Toast.LENGTH_LONG);
         t.show();
     }
 
@@ -103,6 +103,10 @@ public class Login extends Activity {
                 db.insert("USER_DB", null, newAcc);
                 db.close();
                 Toast toast = Toast.makeText(this, "Account Created\nLogin again", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else {
+                Toast toast = Toast.makeText(this, "Account Not Created\nPlease try again", Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
