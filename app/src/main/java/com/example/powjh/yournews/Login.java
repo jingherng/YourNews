@@ -69,6 +69,10 @@ public class Login extends Activity {
             Intent homeIntent = new Intent(Login.this, MainApp.class);
             startActivity(homeIntent);
         }
+        else if (username.getText().toString().equals("") || password.getText().toString().equals("")){
+            Toast toast = Toast.makeText(this, "Please insert a Username/Password", Toast.LENGTH_SHORT);
+            toast.show();
+        }
         else
             showToast();
     }
@@ -92,23 +96,38 @@ public class Login extends Activity {
             toast.show();
         }
         else {
-
-            if (!UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","USERNAME",username.getText().toString())||
-                    !UserDB.CheckIsDataAlreadyInDBorNot("USER_DB","PASSWORD",password.getText().toString())) {
-                ContentValues newAcc = new ContentValues();
-                newAcc.put("USERNAME", username.getText().toString());
-                newAcc.put("PASSWORD", password.getText().toString());
-                SQLiteOpenHelper dbHelper = new UserDB(this);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.insert("USER_DB", null, newAcc);
-                db.close();
-                Toast toast = Toast.makeText(this, "Account Created\nLogin again", Toast.LENGTH_SHORT);
-                toast.show();
+            if (isAlphanumeric(password.getText().toString()) && 4 < password.getText().toString().length() && password.getText().toString().length() < 17
+                    && isAlphanumeric(username.getText().toString()) && 4 < username.getText().toString().length() && username.getText().toString().length() < 17) {
+                if (!UserDB.CheckIsDataAlreadyInDBorNot("USER_DB", "USERNAME", username.getText().toString()) ||
+                        !UserDB.CheckIsDataAlreadyInDBorNot("USER_DB", "PASSWORD", password.getText().toString())) {
+                    ContentValues newAcc = new ContentValues();
+                    newAcc.put("USERNAME", username.getText().toString());
+                    newAcc.put("PASSWORD", password.getText().toString());
+                    SQLiteOpenHelper dbHelper = new UserDB(this);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.insert("USER_DB", null, newAcc);
+                    db.close();
+                    Toast toast = Toast.makeText(this, "Account Created\nLogin again", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(this, "Account Not Created\nPlease try again", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
-            else {
-                Toast toast = Toast.makeText(this, "Account Not Created\nPlease try again", Toast.LENGTH_SHORT);
+            else{
+                Toast toast = Toast.makeText(this, "Username/Password must contain 5 - 16 alphanumeric characters.", Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
+    }
+
+    private boolean isAlphanumeric(String str) {
+        for (int i=0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a)
+                return false;
+        }
+
+        return true;
     }
 }
